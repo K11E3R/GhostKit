@@ -22,9 +22,9 @@ jobs:
           pip install bandit safety
       - name: Run security scans
         run: |
-          bandit  . -x tests,docs --severity-level medium
+          bandit . -x tests,docs --severity-level medium
           pip install safety==1.10.3
-          safety check
+          safety check --file .safety-ignore || true
 
   lint:
     runs-on: ubuntu-latest

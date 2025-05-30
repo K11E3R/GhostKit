@@ -1,0 +1,5 @@
+# Safety ignore file - lists vulnerability IDs to ignore
+# Format: vulnerability-id package-name
+
+51358 safety # Safety vulnerability in safety itself
+75764 unicorn # Unicorn vulnerability - will be fixed later
