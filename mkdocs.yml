@@ -42,12 +42,11 @@ plugins:
   - tags
   - mkdocstrings:
       handlers:
-        python:
-          show_source: true
+        python: {}
   - git-revision-date-localized:
       enable_creation_date: true
   - git-committers:
-      repository: K11E3R/GhostKit-
+      repository: K11E3R/GhostKit
       branch: master
 
 # Extended markdown support for security writeups
