@@ -73,7 +73,7 @@ Ready to unleash the power of GhostKit? Continue to the [Installation Guide](../
 
 Join our thriving community of security professionals:
 
-- [GitHub Discussions](https://github.com/K11E3R/GhostKit-/discussions)
+- [GitHub Discussions](https://github.com/K11E3R/GhostKit/discussions)
 - [Discord Channel](https://discord.gg/ghostkit)
 - [Weekly Office Hours](https://meet.ghostkit.io/office-hours)
 

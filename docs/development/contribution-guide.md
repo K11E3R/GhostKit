@@ -15,11 +15,11 @@ This guide will help you contribute to the GhostKit project effectively. Whether
 1. **Fork the Repository**
    ```bash
    # Clone your fork
-   git clone https://github.com/YOUR-USERNAME/GhostKit-.git
-   cd GhostKit-
+   git clone https://github.com/YOUR-USERNAME/GhostKit.git
+   cd GhostKit
    
    # Add upstream remote
-   git remote add upstream https://github.com/K11E3R/GhostKit-.git
+   git remote add upstream https://github.com/K11E3R/GhostKit.git
    ```
 
 2. **Create Virtual Environment**
@@ -79,7 +79,7 @@ graph LR
    ```
 
 5. **Create a Pull Request**
-   - Go to the [GhostKit repository](https://github.com/K11E3R/GhostKit-)
+   - Go to the [GhostKit repository](https://github.com/K11E3R/GhostKit)
    - Click "New Pull Request"
    - Select "compare across forks"
    - Select your fork and branch

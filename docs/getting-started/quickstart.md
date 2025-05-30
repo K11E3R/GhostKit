@@ -10,7 +10,7 @@ This quickstart guide will get you up and running with GhostKit in under 10 minu
 
 ```bash
 # Clone and install in one command
-git clone https://github.com/K11E3R/GhostKit-.git && cd GhostKit- && \
+git clone https://github.com/K11E3R/GhostKit.git && cd GhostKit && \
 python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && \
 python ghostkit.py --check
 ```

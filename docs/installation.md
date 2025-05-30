@@ -29,8 +29,8 @@ GhostKit is designed to run on various platforms but performs best in Unix-like 
 
 ```bash
 # Clone the repository
-git clone https://github.com/K11E3R/GhostKit-.git
-cd GhostKit-
+git clone https://github.com/K11E3R/GhostKit.git
+cd GhostKit
 
 # Create and activate virtual environment (recommended)
 python -m venv venv
@@ -161,5 +161,5 @@ After installation:
 
 If you encounter issues not covered in this guide:
 1. Check the [FAQ](index.md)
-2. Search existing [GitHub Issues](https://github.com/K11E3R/GhostKit-/issues)
+2. Search existing [GitHub Issues](https://github.com/K11E3R/GhostKit/issues)
 3. Open a new issue with detailed information about your problem
