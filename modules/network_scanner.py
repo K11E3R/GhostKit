@@ -7,18 +7,18 @@ Provides comprehensive network reconnaissance capabilities
 """
 
 import argparse
-import socket
 import ipaddress
-import time
-import random
-import threading
-import queue
-from typing import List, Dict, Any, Optional, Tuple
 import logging
+import queue
+import random
+import socket
+import threading
+import time
+from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import scapy.all as scapy
     import nmap
+    import scapy.all as scapy
 except ImportError:
     logging.error(
         "Required dependencies not found. Install with: pip install scapy python-nmap"

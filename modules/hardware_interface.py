@@ -7,15 +7,15 @@ Provides tools for embedded device analysis, serial communication, and hardware 
 """
 
 import argparse
-import logging
 import json
+import logging
 import os
-import sys
-import time
-import subprocess
 import platform
 import re
-from typing import List, Dict, Any, Optional, Tuple, Union, Set
+import subprocess
+import sys
+import time
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Try to import optional dependencies
 try:

@@ -7,23 +7,24 @@ Specializes in detecting and exploiting Server-Side Request Forgery vulnerabilit
 """
 
 import argparse
-import logging
+import ipaddress
 import json
+import logging
 import os
+import random
+import re
+import socket
+import string
 import sys
 import time
-import random
-import string
-import re
 import urllib.parse
-import ipaddress
-import socket
-from typing import List, Dict, Any, Optional, Tuple, Union, Set
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Import from web_core module
 try:
-    from modules.web_core import WebTarget, WebScanner, Module as WebCoreModule
+    from modules.web_core import Module as WebCoreModule
+    from modules.web_core import WebScanner, WebTarget
 except ImportError:
     logging.error("web_core module not found. This module requires web_core.py")
     WebTarget = None

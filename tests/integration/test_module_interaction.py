@@ -4,8 +4,9 @@ Integration tests for module interactions within the GhostKit framework
 
 import os
 import sys
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 
 # Add the parent directory to the path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -15,8 +16,9 @@ try:
     from ghostkit import GhostKit
 except ImportError:
     import argparse
-    import sys
     import logging
+    import sys
+
     from tests.unit.test_base_module import TestableModule
     from tests.unit.test_web_xss_scanner import XSSScanner
 

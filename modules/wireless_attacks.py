@@ -7,16 +7,16 @@ Provides advanced wireless network analysis and attack capabilities
 """
 
 import argparse
-import logging
 import json
+import logging
 import os
-import sys
-import time
+import queue
 import random
 import subprocess
+import sys
 import threading
-import queue
-from typing import List, Dict, Any, Optional, Tuple, Union, Set
+import time
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Try to import optional dependencies
 try:

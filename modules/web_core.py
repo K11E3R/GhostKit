@@ -7,17 +7,17 @@ Provides the foundation for web application security testing
 """
 
 import argparse
-import logging
 import json
+import logging
 import os
-import sys
-import time
 import random
-import string
-import threading
-import urllib.parse
 import re
-from typing import List, Dict, Any, Optional, Tuple, Union, Set
+import string
+import sys
+import threading
+import time
+import urllib.parse
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Try to import optional dependencies
 try:

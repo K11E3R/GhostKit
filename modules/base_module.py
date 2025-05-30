@@ -7,9 +7,9 @@ All modules must inherit from this class and implement the required methods
 """
 
 import abc
-import logging
 import argparse
-from typing import List, Dict, Any, Optional
+import logging
+from typing import Any, Dict, List, Optional
 
 
 class BaseModule(abc.ABC):
