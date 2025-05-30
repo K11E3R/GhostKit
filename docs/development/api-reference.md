@@ -15,7 +15,7 @@ All API requests require authentication using API keys:
 ```bash
 curl -X GET https://localhost:6781/api/v1/modules \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: your_api_key_here"
+  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER"
 ```
 
 Generate an API key:
@@ -124,7 +124,7 @@ Response:
   "examples": [
     {
       "description": "Basic scan of a web application",
-      "command": "curl -X POST https://localhost:6781/api/v1/tasks -H \"Content-Type: application/json\" -H \"X-API-Key: your_api_key_here\" -d '{\"module\": \"web_scanner\", \"parameters\": {\"url\": \"https://example.com\", \"modules\": [\"sqli\", \"xss\"]}}'",
+      "command": "curl -X POST https://localhost:6781/api/v1/tasks -H \"Content-Type: application/json\" -H \"X-API-Key: YOUR_API_KEY_PLACEHOLDER\" -d '{\"module\": \"web_scanner\", \"parameters\": {\"url\": \"https://example.com\", \"modules\": [\"sqli\", \"xss\"]}}'",
       "request": {
         "module": "web_scanner",
         "parameters": {
@@ -630,7 +630,7 @@ curl -X POST https://localhost:6781/api/v1/tasks \
 
 # Get the results
 curl -X GET https://localhost:6781/api/v1/tasks/task_id/results \
-  -H "X-API-Key: your_api_key_here"
+  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER"
 ```
 
 ### Python Requests
@@ -644,7 +644,7 @@ API_KEY = "your_api_key_here"
 
 headers = {
     "Content-Type": "application/json",
-    "X-API-Key": API_KEY
+    "X-API-Key": "YOUR_API_KEY_PLACEHOLDER"
 }
 
 # Run a web vulnerability scan
@@ -700,7 +700,7 @@ const API_KEY = 'your_api_key_here';
 
 const headers = {
   'Content-Type': 'application/json',
-  'X-API-Key': API_KEY
+  'X-API-Key': 'YOUR_API_KEY_PLACEHOLDER'
 };
 
 // Run a network scan
