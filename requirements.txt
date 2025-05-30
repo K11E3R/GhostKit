@@ -9,8 +9,10 @@ pyopenssl>=22.1.0
 
 # Wireless attack dependencies
 pyric>=0.1.6
-pybluez>=0.22; platform_system != "Windows"
 wireless>=0.3.3
+
+# NOTE: For Bluetooth functionality on non-Windows systems, install pybluez manually:
+# pip install git+https://github.com/pybluez/pybluez.git#egg=pybluez
 
 # Web security testing dependencies
 lxml>=4.9.1
