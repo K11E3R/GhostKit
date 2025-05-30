@@ -120,21 +120,50 @@ class BaseModule(abc.ABC):
     """Base class that all GhostKit modules must inherit from"""
 
     def __init__(self) -> None:
-        """Initialize the base module with logging and argument parser
-
-        Sets up the module name, description, logging, and argument parser.
-        Subclasses should call super().__init__() at the beginning of their __init__ method.
-        """
-        # Store any predefined values
         name_value = getattr(self, "name", self.__class__.__name__)
         description_value = getattr(self, "description", "Base module interface")
 
-        # Set up the logger
         self.name: str = name_value
-        self.logger: logging.Logger = logging.getLogger(f"GhostKit.{self.name}")
         self.description: str = description_value
+        self.logger: logging.Logger = logging.getLogger(f"GhostKit.{self.name}")
         self.args_parser: argparse.ArgumentParser = self._create_arg_parser()
         self.config_file: Optional[Path] = None
+
+        # --- Wrapping de la méthode `run` de la sous-classe ---
+        original_run = self.run
+
+        def wrapped_run(args: List[str]) -> ModuleResult:
+            try:
+                result = original_run(args)
+                # Si le module a retourné un dict par erreur, on le transforme
+                if not isinstance(result, ModuleResult):
+                    return ModuleResult(
+                        success=True,
+                        message="Module executed successfully",
+                        module_name=self.name,
+                        data={"raw": result},
+                    )
+                return result
+            except GhostKitException as gk:
+                self.logger.error(f"[{gk.severity.name}] {gk.message}")
+                return ModuleResult(
+                    success=False,
+                    message=gk.message,
+                    module_name=self.name,
+                    severity=gk.severity,
+                    error=gk,
+                )
+            except Exception as exc:
+                self.logger.exception("Unexpected error in module")
+                return ModuleResult(
+                    success=False,
+                    message=f"Unexpected error: {str(exc)}",
+                    module_name=self.name,
+                    severity=ModuleSeverity.CRITICAL,
+                    error=exc,
+                )
+
+        self.run = wrapped_run  # type: ignore
 
     @abc.abstractmethod
     def _create_arg_parser(self) -> argparse.ArgumentParser:
@@ -167,27 +196,13 @@ class BaseModule(abc.ABC):
             ModuleAuthenticationError: If the module fails to authenticate
             ModulePermissionError: If the module lacks necessary permissions
         """
-        try:
-            parsed_args = self.args_parser.parse_args(args)
-            # Subclasses should implement their specific logic here
-            return ModuleResult(
-                success=True,
-                message="Module executed successfully",
-                module_name=self.name,
-                data={"args": vars(parsed_args)},
-            )
-        except Exception as e:
-            self.logger.error(f"Error in module execution: {str(e)}")
-            return ModuleResult(
-                success=False,
-                message=f"Module execution failed: {str(e)}",
-                module_name=self.name,
-                severity=ModuleSeverity.HIGH,
-                error=e,
-            )
-
-        parsed_args = self.args_parser.parse_args(args)
-        return {"status": "not_implemented"}
+        parsed = self.args_parser.parse_args(args)
+        return ModuleResult(
+            success=True,
+            message="Module executed successfully",
+            module_name=self.name,
+            data={"args": vars(parsed)},
+        )
 
     def validate_args(self, args: List[str]) -> bool:
         """
