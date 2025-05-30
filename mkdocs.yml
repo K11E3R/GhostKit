@@ -86,49 +86,24 @@ nav:
       - Overview: getting-started/overview.md
       - Installation: installation.md
       - Quick Start Guide: getting-started/quickstart.md
-      - Configuration: getting-started/configuration.md
+      - Usage: usage.md
   - Core Concepts:
       - Architecture: core-concepts/architecture.md
-      - Module System: core-concepts/module-system.md
-      - Data Flow: core-concepts/data-flow.md
-      - Security Model: core-concepts/security-model.md
   - Offensive Modules:
-      - Overview: modules/overview.md
       - Exploit Engine: modules/exploit_engine.md
-      - Network Reconnaissance: modules/network-recon.md
       - Web Vulnerability Scanner: modules/web-scanner.md
-      - Wireless Attacks: modules/wireless-attacks.md
-      - Hardware Interface: modules/hardware-interface.md
-      - Social Engineering: modules/social-engineering.md
-      - Post-Exploitation: modules/post-exploitation.md
   - Advanced Usage:
-      - Command Line Interface: advanced/cli.md
-      - Automation & Scripting: advanced/automation.md
-      - Custom Payloads: advanced/custom-payloads.md
-      - Evasion Techniques: advanced/evasion.md
-      - Target Profiling: advanced/target-profiling.md
+      - Exploitation Techniques: advanced/exploitation-techniques.md
+      - Threat Intelligence: advanced/threat-intelligence.md
   - Tradecraft:
       - OPSEC Considerations: tradecraft/opsec.md
-      - Red Team Operations: tradecraft/red-team.md
-      - Persistence Mechanisms: tradecraft/persistence.md
-      - Lateral Movement: tradecraft/lateral-movement.md
-      - C2 Integration: tradecraft/c2-integration.md
-  - Threat Intelligence:
-      - MITRE ATT&CK Mapping: threat-intel/mitre-attack.md
-      - IoC Generation: threat-intel/ioc-generation.md
-      - Threat Feeds: threat-intel/threat-feeds.md
+      - MITRE ATT&CK Mapping: tradecraft/mitre-mapping.md
   - Development:
-      - Contributing: development/contributing.md
       - Development Process: development_process.md
       - Plugin Development: development/plugin-development.md
+      - Contribution Guide: development/contribution-guide.md
       - Technical Reference: technical.md
       - API Documentation: development/api-reference.md
-      - Testing Framework: development/testing.md
-  - Security Advisories:
-      - Responsible Disclosure: security/responsible-disclosure.md
-      - Legal Considerations: security/legal.md
+  - Security:
+      - Security Advisories: legal/security-advisories.md
       - Gates: security/gates.md
-  - Support:
-      - FAQ: support/faq.md
-      - Troubleshooting: support/troubleshooting.md
-      - Community: support/community.md

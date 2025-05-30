@@ -852,10 +852,10 @@ https://localhost:6781/api/docs
 
 ## References
 
-- [GhostKit API Development Guide](api-development.md)
-- [GhostKit Integration Examples](integration-examples.md)
-- [API Change Log](api-changelog.md)
-- [API Security Best Practices](api-security.md)
+- [GhostKit API Development Guide](api-reference.md)
+- [GhostKit Integration Examples](../index.md)
+- [API Change Log](api-reference.md)
+- [API Security Best Practices](../security/gates.md)
 
 ---
 

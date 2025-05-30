@@ -148,9 +148,9 @@ python ghostkit.py --report-from reports/web_scan_*.json --format pdf --executiv
 Now that you're up and running with GhostKit, you might want to:
 
 - Explore [Core Concepts](../core-concepts/architecture.md) to understand the framework architecture
-- Learn about [Advanced Usage](../advanced/automation.md) for scripting and automation
+- Learn about [Advanced Usage](../advanced/threat-intelligence.md) for scripting and automation
 - Check out [Tradecraft](../tradecraft/opsec.md) for operational security considerations
-- Read [Module Documentation](../modules/overview.md) for detailed usage of each module
+- Read [Module Documentation](overview.md) for detailed usage of each module
 
 ---
 

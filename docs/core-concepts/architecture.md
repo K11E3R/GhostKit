@@ -324,7 +324,7 @@ All user inputs and external data undergo strict validation:
 def validate_target(target: str) -> bool:
     """Validate target format (IP, domain, URL)"""
     ip_pattern = r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:/[0-9]{1,2})?$"
-    domain_pattern = r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
+    domain_pattern = r"^(?:[a-zA-Z0-9](../index.md)?\.)+[a-zA-Z]{2,}$"
     url_pattern = r"^https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+(?::\d+)?(?:/[-\w%!$&'()*+,;=:@/~]+)*$"
     
     return (re.match(ip_pattern, target) is not None or
@@ -413,8 +413,8 @@ The GhostKit roadmap includes several architectural improvements:
 
 ## References
 
-- [Module System Documentation](module-system.md)
-- [Data Flow Documentation](data-flow.md)
+- [Module System Documentation](../modules/exploit_engine.md)
+- [Data Flow Documentation](../index.md)
 - [Plugin Development Guide](../development/plugin-development.md)
 - [API Reference](../development/api-reference.md)
 

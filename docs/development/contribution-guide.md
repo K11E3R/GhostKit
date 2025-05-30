@@ -446,7 +446,7 @@ bandit -r ghostkit/ -f json -o bandit-results.json
 
 ### Code of Conduct
 
-All contributors must adhere to the [Code of Conduct](../community/code-of-conduct.md), which promotes:
+All contributors must adhere to the [Code of Conduct](../index.md), which promotes:
 
 - Respectful and inclusive communication
 - Constructive feedback
@@ -483,8 +483,8 @@ Major changes should start with a Request for Comments (RFC) document submitted 
 
 - [GhostKit Architecture](../core-concepts/architecture.md)
 - [API Reference](api-reference.md)
-- [Module System](module-system.md)
-- [Developer Tools](developer-tools.md)
+- [Module System](../modules/exploit_engine.md)
+- [Developer Tools](../index.md)
 
 ---
 

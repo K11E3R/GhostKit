@@ -154,12 +154,12 @@ Some modules require additional dependencies:
 
 After installation:
 1. Review the [Usage Guide](usage.md) for basic commands
-2. Explore [Module Documentation](modules/) for specific functionality
-3. Set up your [Development Environment](development.md) if contributing
+2. Explore [Module Documentation](usage.md) for specific functionality
+3. Set up your [Development Environment](development/plugin-development.md) if contributing
 
 ## Support
 
 If you encounter issues not covered in this guide:
-1. Check the [FAQ](faq.md)
+1. Check the [FAQ](index.md)
 2. Search existing [GitHub Issues](https://github.com/K11E3R/GhostKit-/issues)
 3. Open a new issue with detailed information about your problem

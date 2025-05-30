@@ -702,7 +702,7 @@ Basic usage:
 python ghostkit.py -m awesome_attack -t example.com --awesome-level 8
 ```
 
-See the [documentation](docs/usage.md) for detailed usage instructions.
+See the [documentation](../usage.md) for detailed usage instructions.
 
 ## License
 
@@ -908,8 +908,8 @@ class AwesomeAuthHandler:
 
 - [GhostKit Plugin API Reference](../development/api-reference.md)
 - [GhostKit Core Architecture](../core-concepts/architecture.md)
-- [Event System Documentation](../development/event-system.md)
-- [Module Development Guide](../development/module-development.md)
+- [Event System Documentation](plugin-development.md)
+- [Module Development Guide](plugin-development.md)
 
 ---
 

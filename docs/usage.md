@@ -237,7 +237,7 @@ Common error codes and their meaning:
 
 ## Further Resources
 
-- [Module Documentation](modules/) - Detailed guides for each module
-- [Workflows](workflows/) - Common assessment workflows
-- [API Reference](api/) - Documentation for the GhostKit API
-- [Troubleshooting](troubleshooting.md) - Solutions to common problems
+- [Module Documentation](usage.md) - Detailed guides for each module
+- [Workflows](usage.md) - Common assessment workflows
+- [API Reference](usage.md) - Documentation for the GhostKit API
+- [Troubleshooting](index.md) - Solutions to common problems

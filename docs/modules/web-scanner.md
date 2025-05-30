@@ -361,7 +361,7 @@ For effective web application testing:
 | Authentication failures | Session expiration | Configure proper session handling |
 | Incomplete crawling | JavaScript-heavy site | Enable headless browser crawling |
 
-For more specific issues, see the [Troubleshooting Guide](../support/troubleshooting.md).
+For more specific issues, see the [Troubleshooting Guide](../index.md).
 
 ## References
 

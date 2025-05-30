@@ -367,14 +367,14 @@ python ghostkit.py --generate-layer --include-modules web_scanner,exploit_engine
 
 Example Navigator visualization:
 
-![MITRE ATT&CK Navigator](../assets/images/attack-navigator.png)
+![MITRE ATT&CK Navigator](../index.md)
 
 ## References
 
 - [MITRE ATT&CK Framework](https://attack.mitre.org/)
 - [MITRE ATT&CK Enterprise Matrix](https://attack.mitre.org/matrices/enterprise/)
 - [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/)
-- [GhostKit Module Documentation](../modules/overview.md)
+- [GhostKit Module Documentation](../getting-started/overview.md)
 
 ---
 
