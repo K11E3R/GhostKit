@@ -17,14 +17,12 @@ try:
     # Create a concrete implementation for testing
     class TestableModule(BaseModule):
         def __init__(self, name="TestModule"):
-            # Store values temporarily before super init
-            name_value = name
-            description_value = "Test module for unit testing"
+            # First set our instance attributes
+            self.name = name
+            self.description = "Test module for unit testing"
             self.options = {}
+            # Then call super() - BaseModule will preserve our attributes
             super().__init__()
-            # Reset values after super().__init__ to preserve them
-            self.name = name_value
-            self.description = description_value
 
         def _create_arg_parser(self):
             import argparse
