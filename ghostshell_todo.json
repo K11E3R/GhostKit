@@ -37,8 +37,12 @@
     
     {"id": 32, "desc": "[FIX] Update GitHub workflow to properly build docs with MkDocs", "done": true},
     {"id": 33, "desc": "[FIX] Fix mkdocs.yml configuration to remove incompatible parameters", "done": true},
-    {"id": 34, "desc": "[ADD] Commit and push workflow changes to GitHub", "done": false},
-    {"id": 35, "desc": "[ADD] Verify GitHub Pages deployment is working correctly", "done": false},
-    {"id": 36, "desc": "[ADD] Update README with GitHub Pages URL", "done": false}
+    {"id": 34, "desc": "[ADD] Inject cyberpunk styling with custom CSS overhaul", "done": true},
+    {"id": 35, "desc": "[ADD] Create interactive elements with custom JavaScript", "done": true},
+    {"id": 36, "desc": "[ADD] Build dynamic hero section with animations", "done": true},
+    {"id": 37, "desc": "[ADD] Implement asset auto-loader for all enhancements", "done": true},
+    {"id": 38, "desc": "[ADD] Commit and push site enhancements to GitHub", "done": false},
+    {"id": 39, "desc": "[ADD] Verify GitHub Pages deployment is working correctly", "done": false},
+    {"id": 40, "desc": "[ADD] Update README with GitHub Pages URL", "done": false}
   ]
 }
