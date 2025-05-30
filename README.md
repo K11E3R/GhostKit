@@ -8,7 +8,24 @@
 
 GhostKit is a modular, advanced security analysis framework designed for offensive security professionals, penetration testers, and security researchers. It combines traditional exploitation techniques with cutting-edge AI-powered analysis, hardware interface capabilities, and advanced web vulnerability scanning.
 
-⚠️ **DISCLAIMER**: This tool is for educational and authorized security testing purposes only. The authors are not responsible for any misuse or illegal activities conducted with this software.
+## ⚠️ **CRITICAL SECURITY WARNING** ⚠️
+
+**EXTREME CAUTION REQUIRED**: GhostKit contains highly dangerous cybersecurity tools that can:
+- Cause irreversible system damage
+- Breach network security
+- Lead to unauthorized data access
+- Violate computer crime laws (CFAA in US, Computer Misuse Act in UK, etc.)
+- Result in civil and criminal liability, including imprisonment
+
+**LEGAL RESTRICTIONS**: Using these tools against systems without explicit written permission is **ILLEGAL** in most jurisdictions worldwide. No implied consent is sufficient.
+
+**CONTROLLED USAGE ONLY**: 
+- Use ONLY in isolated lab environments you own
+- NEVER deploy against production systems without proper authorization
+- ALWAYS maintain detailed audit logs of all activities
+- Verify legal compliance before ANY usage
+
+**THE AUTHORS EXPLICITLY DISCLAIM ALL LIABILITY** for any damages, legal issues, or other consequences resulting from the use or misuse of this software. By using GhostKit, you accept FULL RESPONSIBILITY for your actions.
 
 ## Features
 
