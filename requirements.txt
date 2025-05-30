@@ -1,0 +1,33 @@
+# Core dependencies
+requests>=2.28.1
+beautifulsoup4>=4.11.1
+scapy>=2.4.5
+python-nmap>=0.7.1
+cryptography>=38.0.1
+psutil>=5.9.3
+pyopenssl>=22.1.0
+
+# Wireless attack dependencies
+pyric>=0.1.6
+pybluez>=0.22; platform_system != "Windows"
+wireless>=0.3.3
+
+# Web security testing dependencies
+lxml>=4.9.1
+sslyze>=5.1.0
+dns-resolver>=0.2.1
+xml-detector>=0.3.0
+
+# Exploitation dependencies
+impacket>=0.10.0
+requests-ntlm>=1.1.0
+ldap3>=2.9.1
+pyyaml>=6.0
+pwntools>=4.9.0
+
+# Optional dependencies for enhanced functionality
+pillow>=9.3.0  # For image processing
+pyserial>=3.5  # For hardware interfaces
+flask>=2.2.2  # For API interfaces
+pyinstaller>=5.6.2  # For creating standalone executables
+pywin32>=305; platform_system == "Windows"  # For Windows-specific functions
