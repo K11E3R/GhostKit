@@ -2,23 +2,74 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+pycache/
 
 # Distribution / packaging
 dist/
 build/
 *.egg-info/
+*.egg
+*.whl
+.eggs/
+SDIST/
 
-# Log files
+# Log files and reports
 *.log
+logs/
+.coverage
+.coverage.*
+coverage.xml
+coverage.json
+htmlcov/
+nosetests.xml
+junit-*.xml
+report.xml
 
 # Virtual environments
 venv/
 env/
 ENV/
+.venv/
+.env
+.python-version
 
 # IDE specific files
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation builds
+docs/_build/
+docs/site/
+site/
+
+# Secure files that shouldn't be committed
+*.pem
+*.key
+*.cer
+*.pfx
+*.p12
+*.jks
+*.keystore
+.secrets
+
+# Temporary files
+*.tmp
+*.bak
+.temp/
+tmp/
+temp/
+
+# Tool output
+.bandit
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.ipynb_checkpoints
 *.swp
 *.swo
 

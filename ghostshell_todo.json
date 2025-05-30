@@ -1,13 +1,30 @@
 {
   "confirmed": true,
   "tasks": [
-    {"id": 1, "desc": "Fix BaseModule abstract method implementations (_create_arg_parser and run)", "done": false},
-    {"id": 2, "desc": "Fix hardware_interface module to implement abstract methods", "done": false},
-    {"id": 3, "desc": "Fix web_ssrf_scanner to implement abstract methods", "done": false},
-    {"id": 4, "desc": "Update GhostKit.load_modules() to return module count", "done": false},
-    {"id": 5, "desc": "Fix XSSScanner class to match test expectations (name, set_option, execute)", "done": false},
-    {"id": 6, "desc": "Fix GhostKit.run_module() to handle missing args parameter", "done": false},
-    {"id": 7, "desc": "Install numpy and fix ai_vulnerability_analyzer dependency issues", "done": false},
-    {"id": 8, "desc": "Update TestableModule in test_base_module.py to fix constructor issues", "done": false}
+    {"id": 1, "desc": "Fix BaseModule abstract method implementations (_create_arg_parser and run)", "done": true},
+    {"id": 2, "desc": "Fix hardware_interface module to implement abstract methods", "done": true},
+    {"id": 3, "desc": "Fix web_ssrf_scanner to implement abstract methods", "done": true},
+    {"id": 4, "desc": "Update GhostKit.load_modules() to return module count", "done": true},
+    {"id": 5, "desc": "Fix XSSScanner class to match test expectations (name, set_option, execute)", "done": true},
+    {"id": 6, "desc": "Fix GhostKit.run_module() to handle missing args parameter", "done": true},
+    {"id": 7, "desc": "Install numpy and fix ai_vulnerability_analyzer dependency issues", "done": true},
+    {"id": 8, "desc": "Update TestableModule in test_base_module.py to fix constructor issues", "done": false},
+    
+    {"id": 9, "desc": "Implement type hints and error handling across all modules", "done": false},
+    {"id": 10, "desc": "Refactor web scanners to use standardized ModuleResult objects", "done": false},
+    {"id": 11, "desc": "Implement sandbox for exploit execution with configurable safety limits", "done": false},
+    {"id": 12, "desc": "Replace hardcoded payloads with YAML/JSON typed configuration files", "done": false},
+    {"id": 13, "desc": "Create mock objects for hardware and AI modules to enable CI testing", "done": false},
+    {"id": 14, "desc": "Add proper rate-limiting and robots.txt compliance to web scanners", "done": false},
+    {"id": 15, "desc": "Implement plugin system for exploit_engine with auto-discovery", "done": false},
+    {"id": 16, "desc": "Add structured logging and telemetry with configurable verbosity", "done": false},
+    {"id": 17, "desc": "Implement report generation system with HTML/PDF exporters", "done": false},
+    {"id": 18, "desc": "Add auto-update mechanism for modules via Git or PyPI", "done": false},
+    {"id": 19, "desc": "Refactor wireless_attacks.py to include dynamic channel detection", "done": false},
+    {"id": 20, "desc": "Improve regex patterns in web scanners for better detection accuracy", "done": false},
+    {"id": 21, "desc": "Add performance metrics and convergence indicators to neural_swarm", "done": false},
+    {"id": 22, "desc": "Implement MITRE ATT&CK mapping for all exploitation modules", "done": false},
+    {"id": 23, "desc": "Create comprehensive module documentation with examples", "done": false},
+    {"id": 24, "desc": "Implement progressive scanning in web modules (passive → active)", "done": false}
   ]
 }
