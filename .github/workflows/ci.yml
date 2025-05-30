@@ -22,8 +22,8 @@ jobs:
           pip install bandit safety
       - name: Run security scans
         run: |
-          bandit -r . -x tests,docs
-          safety check
+          bandit . -x tests,docs
+          safety scan
 
   lint:
     runs-on: ubuntu-latest
