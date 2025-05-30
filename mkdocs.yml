@@ -43,7 +43,6 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          docstring_style: google
           show_source: true
   - git-revision-date-localized:
       enable_creation_date: true
