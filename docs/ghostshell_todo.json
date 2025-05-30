@@ -17,6 +17,6 @@
     {"id": 14, "desc": "Create GhostKit logo for social cards", "done": true},
     {"id": 15, "desc": "Fix MkDocs navigation configuration", "done": true},
     {"id": 16, "desc": "Repair broken links in documentation", "done": true},
-    {"id": 17, "desc": "Ensure MkDocs builds without errors", "done": false}
+    {"id": 17, "desc": "Ensure MkDocs builds without errors", "done": true}
   ]
 }
