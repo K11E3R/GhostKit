@@ -132,7 +132,7 @@ class BaseModule(abc.ABC):
         # --- Wrapping de la méthode `run` de la sous-classe ---
         original_run = self.run
 
-        def wrapped_run(self, args: List[str]) -> ModuleResult:
+        def wrapped_run(args: List[str]) -> ModuleResult:
             try:
                 result = original_run(args)
                 # Si le module a retourné un dict par erreur, on le transforme
@@ -163,7 +163,7 @@ class BaseModule(abc.ABC):
                     error=exc,
                 )
 
-        self.run = self.wrapped_run  # type: ignore
+        self.run = wrapped_run  # type: ignore
 
     @abc.abstractmethod
     def _create_arg_parser(self) -> argparse.ArgumentParser:
