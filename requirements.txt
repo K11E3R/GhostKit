@@ -16,6 +16,7 @@ wireless>=0.3.3
 
 # Web security testing dependencies
 lxml>=4.9.1
+numpy
 sslyze>=5.1.0
 dnspython>=2.2.1  # For DNS operations
 defusedxml>=0.7.1  # For safe XML processing
