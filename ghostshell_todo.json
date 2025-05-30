@@ -1,13 +1,13 @@
 {
   "confirmed": true,
   "tasks": [
-    {"id": 1, "desc": "Create comprehensive exploitation module with modern exploit techniques", "done": true},
-    {"id": 2, "desc": "Implement advanced post-exploitation framework with lateral movement capabilities", "done": true},
-    {"id": 3, "desc": "Develop memory manipulation module for process injection and DLL hijacking", "done": true},
-    {"id": 4, "desc": "Create EDR evasion module with anti-forensic capabilities", "done": true},
-    {"id": 5, "desc": "Implement wireless attack module for various protocols (WiFi, Bluetooth, ZigBee)", "done": true},
-    {"id": 6, "desc": "Add web application security testing with advanced XSS/SQLi/SSRF capabilities", "done": true},
-    {"id": 7, "desc": "Create hardware interface module for embedded device analysis", "done": true},
-    {"id": 8, "desc": "Add AI-powered vulnerability discovery and exploitation suggestions", "done": true}
+    {"id": 1, "desc": "Fix BaseModule abstract method implementations (_create_arg_parser and run)", "done": false},
+    {"id": 2, "desc": "Fix hardware_interface module to implement abstract methods", "done": false},
+    {"id": 3, "desc": "Fix web_ssrf_scanner to implement abstract methods", "done": false},
+    {"id": 4, "desc": "Update GhostKit.load_modules() to return module count", "done": false},
+    {"id": 5, "desc": "Fix XSSScanner class to match test expectations (name, set_option, execute)", "done": false},
+    {"id": 6, "desc": "Fix GhostKit.run_module() to handle missing args parameter", "done": false},
+    {"id": 7, "desc": "Install numpy and fix ai_vulnerability_analyzer dependency issues", "done": false},
+    {"id": 8, "desc": "Update TestableModule in test_base_module.py to fix constructor issues", "done": false}
   ]
 }
