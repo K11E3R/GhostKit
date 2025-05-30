@@ -35,9 +35,10 @@
     {"id": 30, "desc": "Verify all markdown links are correctly formatted for GitHub rendering", "done": true},
     {"id": 31, "desc": "Track the fix_broken_links.py, generate_banners.py, and generate_logo.py scripts", "done": true},
     
-    {"id": 32, "desc": "[ADD] Update GitHub workflow to deploy existing site directory", "done": true},
-    {"id": 33, "desc": "[ADD] Commit and push site directory changes to GitHub", "done": false},
-    {"id": 34, "desc": "[ADD] Verify GitHub Pages deployment is working correctly", "done": false},
-    {"id": 35, "desc": "[ADD] Update README with GitHub Pages URL", "done": false}
+    {"id": 32, "desc": "[FIX] Update GitHub workflow to properly build docs with MkDocs", "done": true},
+    {"id": 33, "desc": "[FIX] Fix mkdocs.yml configuration to remove incompatible parameters", "done": true},
+    {"id": 34, "desc": "[ADD] Commit and push workflow changes to GitHub", "done": false},
+    {"id": 35, "desc": "[ADD] Verify GitHub Pages deployment is working correctly", "done": false},
+    {"id": 36, "desc": "[ADD] Update README with GitHub Pages URL", "done": false}
   ]
 }
