@@ -13,6 +13,7 @@ import os
 import sys
 import time
 import random
+import string
 import re
 import urllib.parse
 import ipaddress
@@ -344,6 +345,11 @@ class Module(BaseModule):
         """Run the SSRF scanner module"""
         if args is None:
             args = []
+        
+        parser = argparse.ArgumentParser(description="SSRF Scanner")
+        parser.add_argument("-u", "--url", required=True, help="Target URL to scan")
+        parser.add_argument("-p", "--parameters", help="Additional parameters to test")
+        parser.add_argument("-o", "--output", help="Output file for results")
         
         if args:
             args = parser.parse_args(args)

