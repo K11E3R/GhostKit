@@ -618,7 +618,7 @@ curl -X POST https://localhost:6781/api/v1/auth/login \
 # Run a port scan
 curl -X POST https://localhost:6781/api/v1/tasks \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: your_api_key_here" \
+  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER" \
   -d '{
     "module": "port_scanner",
     "parameters": {

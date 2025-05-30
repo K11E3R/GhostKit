@@ -22,10 +22,22 @@ Advanced Security Analysis Framework
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![Documentation](https://img.shields.io/badge/docs-cyberpunk-00ff66.svg)](https://K11E3R.github.io/GhostKit/)
 
 *Combining cutting-edge AI, hardware interface capabilities, and advanced exploitation techniques*
 
 </div>
+
+## 🌐 Cyberpunk Documentation Site
+
+GhostKit now features a [cyberpunk-enhanced documentation portal](https://K11E3R.github.io/GhostKit/) with:
+- Interactive terminal demos with typing animations
+- Matrix-style background effects and tactical UI
+- Glowing code sections and exploit visualization
+- Responsive, dark-mode optimized interface
+- Animated section headers and navigation elements
+
+Access the full tactical experience at [https://K11E3R.github.io/GhostKit/](https://K11E3R.github.io/GhostKit/)
 
 ## 📚 Table of Contents
 
@@ -45,17 +57,19 @@ Advanced Security Analysis Framework
 
 GhostKit is a modular, advanced security analysis framework designed for offensive security professionals, penetration testers, and security researchers. It combines traditional exploitation techniques with cutting-edge AI-powered analysis, hardware interface capabilities, and advanced web vulnerability scanning.
 
-> **Detailed documentation can be found in the [docs/](docs/) directory.**
+> **Full documentation available on our [GitHub Pages site](https://K11E3R.github.io/GhostKit/).**
 
-### Documentation Structure
+### Documentation Site
 
-| Document | Description |
+Our [cyberpunk-enhanced documentation site](https://K11E3R.github.io/GhostKit/) provides a comprehensive guide to GhostKit with interactive elements, tactical UI, and advanced visualization. Key sections include:
+
+| Section | Description |
 |----------|-------------|
-| [Installation Guide](docs/installation.md) | Detailed setup instructions |
-| [Module Documentation](docs/modules/) | Detailed documentation for each module |
-| [Security Standards](docs/security.md) | Security protocols and guidelines |
-| [Development Guide](docs/development.md) | Guide for contributors and developers |
-| [API Reference](docs/api/) | API documentation and references |
+| [Installation Guide](https://K11E3R.github.io/GhostKit/installation/) | Detailed setup instructions |
+| [Module Documentation](https://K11E3R.github.io/GhostKit/modules/) | Detailed documentation for each module |
+| [Security Standards](https://K11E3R.github.io/GhostKit/security/gates/) | Security protocols and guidelines |
+| [Development Guide](https://K11E3R.github.io/GhostKit/development_process/) | Guide for contributors and developers |
+| [API Reference](https://K11E3R.github.io/GhostKit/development/api-reference/) | API documentation and references |
 
 ## ⚠️ **CRITICAL SECURITY WARNING** ⚠️
 
@@ -138,7 +152,7 @@ GhostKit/
 
 ## 🛠️ Installation
 
-> **Full installation details available in [docs/installation.md](docs/installation.md)**
+> **Full installation details available on our [installation page](https://K11E3R.github.io/GhostKit/installation/)**
 
 ### Quick Start
 
@@ -170,11 +184,11 @@ python ghostkit.py --check
 - SDR equipment for wireless modules
 - Network adapters with monitor mode support
 
-> See the [Hardware Compatibility Guide](docs/hardware/compatibility.md) for detailed specifications.
+> See the [Hardware Compatibility Guide](https://K11E3R.github.io/GhostKit/technical/) for detailed specifications.
 
 ## 🚀 Usage
 
-> **Complete usage documentation available in [docs/usage.md](docs/usage.md)**
+> **Complete usage documentation available on our [usage page](https://K11E3R.github.io/GhostKit/usage/)**
 
 ### Command Line Interface
 
@@ -265,7 +279,7 @@ python ghostkit.py --chain "network_scanner,vulnerability_analyzer,exploit_engin
 
 ## 📊 Example Workflows
 
-> **Detailed attack workflows available in [docs/workflows/](docs/workflows/)**
+> **Detailed attack workflows available in our [documentation site](https://K11E3R.github.io/GhostKit/)**
 
 ### Red Team Assessment Workflow
 
@@ -392,14 +406,14 @@ python ghostkit.py --chain "network_scanner,vulnerability_analyzer,exploit_engin
 
 ## 📝 Contributing
 
-> **Comprehensive contributor guide available at [docs/contributing.md](docs/contributing.md)**
+> **Comprehensive contributor guide available at our [contribution guide](https://K11E3R.github.io/GhostKit/development/contribution-guide/)**
 
 ### Contributor Quickstart
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/K11E3R/GhostKit-.git
-cd GhostKit-
+git clone https://github.com/K11E3R/GhostKit.git
+cd GhostKit
 
 # Set up development environment
 pip install -r requirements.txt -r requirements-dev.txt
