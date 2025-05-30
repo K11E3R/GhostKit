@@ -466,7 +466,9 @@ class FirmwareAnalyzer:
             "DEBUG_MODE=TRUE",
             "192.168.1.1",
             "https://example.com/update",
-            "SSH_KEY=abcdef1234567890",
+            # SSH keys should NEVER be hardcoded in source
+            # Retrieve from environment or secure credential store instead
+            f"SSH_KEY={os.environ.get('HARDWARE_SSH_KEY', '')}",
         ]
 
         # Search for interesting patterns
