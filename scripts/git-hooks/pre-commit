@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+echo "🔍 GhostKit pre-commit hook running..."
+
+# Run flake8 syntax check (only critical errors)
+echo "🐍 Running flake8 syntax check..."
+flake8 . --count --select=E9,F63,F7,F82 --statistics
+if [ $? -ne 0 ]; then
+  echo "❌ Flake8 found critical errors. Fix them before committing."
+  exit 1
+fi
+
+# Run critical tests
+echo "🧪 Running critical tests..."
+# Fast subset of tests - adjust as needed
+python -m pytest tests/unit/ -v
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed! Fix them before committing."
+  exit 1
+fi
+
+# Check for merge conflict markers
+echo "🔀 Checking for merge conflict markers..."
+if grep -r "<<<<<<< HEAD" --include="*.py" .; then
+  echo "❌ Found merge conflict markers! Resolve conflicts before committing."
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed! Proceeding with commit..."
+exit 0

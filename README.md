@@ -186,3 +186,5 @@ Developed by GhostShellX
 <p align="center">
   <i>GhostKit - Advancing offensive security through intelligence and automation</i>
 </p>
+## Developer Setup
+To install git hooks: `cp scripts/git-hooks/* .git/hooks/`
