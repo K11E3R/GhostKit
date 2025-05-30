@@ -125,6 +125,14 @@ class TestBaseModule:
         module = TestableModule()
         result = module.run(["-t", "example.com"])
 
-        assert isinstance(result, dict)
-        assert "status" in result
-        assert result["status"] == "success"
+        # Updated to expect ModuleResult instead of dict
+        from modules.base_module import ModuleResult
+
+        assert isinstance(result, ModuleResult)
+        assert result.success == True
+        assert result.module_name == "TestModule"
+
+        # Check that our original dict data is in the data["raw"] field
+        assert result.data is not None
+        assert "raw" in result.data
+        assert result.data["raw"]["status"] == "success"

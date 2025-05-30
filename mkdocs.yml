@@ -1,0 +1,50 @@
+site_name: GhostKit Documentation
+site_description: Documentation for the GhostKit security toolkit
+site_author: GhostKit Team
+
+repo_name: GhostKit
+repo_url: https://github.com/K11E3R/GhostKit-
+
+theme:
+  name: material
+  palette:
+    primary: black
+    accent: red
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: google
+          rendering:
+            show_source: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - User Guide: 
+      - Getting Started: guide/getting-started.md
+      - Usage: guide/usage.md
+  - Modules:
+      - Overview: modules/overview.md
+      - Base Module: modules/base_module.md
+      - Web Scanners: modules/web_scanners.md
+  - Development:
+      - Contributing: development/contributing.md
+      - Architecture: development/architecture.md
+  - API Reference: api.md
