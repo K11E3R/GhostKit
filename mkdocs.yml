@@ -1,48 +1,134 @@
-site_name: GhostKit Documentation
-site_description: Documentation for the GhostKit security toolkit
-site_author: GhostKit Team
+site_name: GhostKit | Advanced Offensive Security Framework
+site_description: Comprehensive documentation for the GhostKit offensive security toolkit
+site_author: GhostKit Red Team
 
 repo_name: GhostKit
 repo_url: https://github.com/K11E3R/GhostKit-
 
+# Enhanced Material theme with cybersecurity-focused design
 theme:
   name: material
   palette:
+    # Dark mode for proper hacker aesthetic
+    scheme: slate
     primary: black
     accent: red
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+  logo: assets/images/ghostkit-logo.png
+  favicon: assets/images/favicon.ico
   features:
     - navigation.tabs
     - navigation.sections
     - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
     - search.suggest
     - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
 
+# Enhanced plugins for security documentation
 plugins:
   - search
+  - social
+  - tags
   - mkdocstrings:
       handlers:
         python:
           docstring_style: google
           show_source: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: K11E3R/GhostKit-
+      branch: master
 
+# Extended markdown support for security writeups
 markdown_extensions:
-  - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - admonition
   - pymdownx.details
-  - pymdownx.tabbed
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - def_list
+  - attr_list
+  - md_in_html
+  - footnotes
+  - tables
 
+# GhostKit's comprehensive documentation structure
 nav:
   - Home: index.md
-  - Installation: installation.md
-  - User Guide: 
-      - Getting Started: guide/getting-started.md
-      - Usage: guide/usage.md
-  - Modules:
+  - Getting Started:
+      - Overview: getting-started/overview.md
+      - Installation: installation.md
+      - Quick Start Guide: getting-started/quickstart.md
+      - Configuration: getting-started/configuration.md
+  - Core Concepts:
+      - Architecture: core-concepts/architecture.md
+      - Module System: core-concepts/module-system.md
+      - Data Flow: core-concepts/data-flow.md
+      - Security Model: core-concepts/security-model.md
+  - Offensive Modules:
       - Overview: modules/overview.md
-      - Base Module: modules/base_module.md
-      - Web Scanners: modules/web_scanners.md
+      - Exploit Engine: modules/exploit_engine.md
+      - Network Reconnaissance: modules/network-recon.md
+      - Web Vulnerability Scanner: modules/web-scanner.md
+      - Wireless Attacks: modules/wireless-attacks.md
+      - Hardware Interface: modules/hardware-interface.md
+      - Social Engineering: modules/social-engineering.md
+      - Post-Exploitation: modules/post-exploitation.md
+  - Advanced Usage:
+      - Command Line Interface: advanced/cli.md
+      - Automation & Scripting: advanced/automation.md
+      - Custom Payloads: advanced/custom-payloads.md
+      - Evasion Techniques: advanced/evasion.md
+      - Target Profiling: advanced/target-profiling.md
+  - Tradecraft:
+      - OPSEC Considerations: tradecraft/opsec.md
+      - Red Team Operations: tradecraft/red-team.md
+      - Persistence Mechanisms: tradecraft/persistence.md
+      - Lateral Movement: tradecraft/lateral-movement.md
+      - C2 Integration: tradecraft/c2-integration.md
+  - Threat Intelligence:
+      - MITRE ATT&CK Mapping: threat-intel/mitre-attack.md
+      - IoC Generation: threat-intel/ioc-generation.md
+      - Threat Feeds: threat-intel/threat-feeds.md
   - Development:
       - Contributing: development/contributing.md
-      - Architecture: development/architecture.md
-  - API Reference: api.md
+      - Development Process: development_process.md
+      - Plugin Development: development/plugin-development.md
+      - Technical Reference: technical.md
+      - API Documentation: development/api-reference.md
+      - Testing Framework: development/testing.md
+  - Security Advisories:
+      - Responsible Disclosure: security/responsible-disclosure.md
+      - Legal Considerations: security/legal.md
+      - Gates: security/gates.md
+  - Support:
+      - FAQ: support/faq.md
+      - Troubleshooting: support/troubleshooting.md
+      - Community: support/community.md
