@@ -322,8 +322,18 @@ class WPACracker:
                         return True
                 return False
 
-            # Set channel
-            os.system(f"iwconfig {interface} channel {channel}")
+            # Set channel (securely using subprocess with explicit arguments)
+            try:
+                subprocess.run(
+                    ["iwconfig", interface, "channel", str(channel)],
+                    check=True,
+                    shell=False,
+                    capture_output=True,
+                    text=True,
+                )
+            except subprocess.CalledProcessError as e:
+                logging.error(f"Failed to set channel: {e}")
+                return False
 
             # Start packet capture
             writer = scapy.PcapWriter(output_file, append=True)

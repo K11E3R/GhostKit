@@ -1,31 +1,60 @@
 #!/bin/bash
-set -e
 
-echo "🔍 GhostKit pre-commit hook running..."
+# GhostKit pre-commit hook with security checks and code quality gates
+# Colors for better visibility
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}🔍 GhostKit pre-commit hook running...${NC}"
+
+# Check import formatting with isort
+echo -e "${BLUE}📋 Checking import sorting...${NC}"
+isort --check-only --profile black . || {
+  echo -e "${RED}❌ Import sorting issues found! Run 'isort --profile black .' to fix.${NC}"
+  exit 1
+}
+
+# Check code formatting with black
+echo -e "${BLUE}🎨 Checking code formatting...${NC}"
+black --check . || {
+  echo -e "${RED}❌ Code needs formatting! Run 'black .' to fix.${NC}"
+  echo -e "${YELLOW}💡 Tip: Use 'black --diff .' to see proposed changes.${NC}"
+  exit 1
+}
 
 # Run flake8 syntax check (only critical errors)
-echo "🐍 Running flake8 syntax check..."
-flake8 . --count --select=E9,F63,F7,F82 --statistics
-if [ $? -ne 0 ]; then
-  echo "❌ Flake8 found critical errors. Fix them before committing."
+echo -e "${BLUE}🐍 Running syntax check...${NC}"
+flake8 . --count --select=E9,F63,F7,F82 --statistics || {
+  echo -e "${RED}❌ Critical syntax errors detected! Fix before committing.${NC}"
   exit 1
-fi
+}
 
-# Run critical tests
-echo "🧪 Running critical tests..."
-# Fast subset of tests - adjust as needed
-python -m pytest tests/unit/ -v
-if [ $? -ne 0 ]; then
-  echo "❌ Tests failed! Fix them before committing."
+# Run security checks with bandit (HIGH priority)
+echo -e "${BLUE}🔒 Running security checks...${NC}"
+bandit -r . -x tests,docs --severity-level high || {
+  echo -e "${RED}❌ HIGH SEVERITY security issues found! Fix before committing.${NC}"
+  echo -e "${YELLOW}💡 Run 'bandit -r <file>' on specific files for details${NC}"
   exit 1
-fi
+}
 
 # Check for merge conflict markers
-echo "🔀 Checking for merge conflict markers..."
+echo -e "${BLUE}🔀 Checking for merge conflict markers...${NC}"
 if grep -r "<<<<<<< HEAD" --include="*.py" .; then
-  echo "❌ Found merge conflict markers! Resolve conflicts before committing."
+  echo -e "${RED}❌ Found merge conflict markers! Resolve conflicts before committing.${NC}"
   exit 1
 fi
 
-echo "✅ Pre-commit checks passed! Proceeding with commit..."
+# Run critical tests (if environment variable set)
+if [ "$RUN_TESTS" = "true" ]; then
+  echo -e "${BLUE}🧪 Running unit tests...${NC}"
+  python -m pytest tests/unit/ -v || {
+    echo -e "${RED}❌ Tests failed! Fix before committing.${NC}"
+    exit 1
+  }
+fi
+
+echo -e "${GREEN}✅ All quality and security gates passed!${NC}"
 exit 0

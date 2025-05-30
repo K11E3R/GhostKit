@@ -285,9 +285,14 @@ class SwarmController:
 
     def submit_task(self, task_type: str, data: Dict[str, Any]) -> str:
         """Submit a task to the swarm"""
-        task_id = hashlib.md5(
-            f"{task_type}_{time.time()}_{random.random()}".encode()
-        ).hexdigest()
+        # Using SHA-256 for task_id generation (not for security purposes, just for unique ID)
+        # usedforsecurity=False explicitly marks this is not for cryptographic security
+        task_id = hashlib.sha256(
+            f"{task_type}_{time.time()}_{random.random()}".encode(),
+            usedforsecurity=False,
+        ).hexdigest()[
+            :32
+        ]  # truncate to same length as original
         task = {
             "id": task_id,
             "type": task_type,
