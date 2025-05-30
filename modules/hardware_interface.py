@@ -682,6 +682,77 @@ class Module(BaseModule):
         else:
             return {"status": "error", "message": "Unknown command"}
 
+class Module(BaseModule):
+    """GhostKit Hardware Interface Module"""
+    
+    def __init__(self):
+        self.name = "hardware_interface"
+        self.description = "Hardware interface tools for embedded device analysis"
+        super().__init__()
+    
+    def _create_arg_parser(self) -> argparse.ArgumentParser:
+        """Create an argument parser for the module"""
+        parser = argparse.ArgumentParser(description=self.description)
+        subparsers = parser.add_subparsers(dest='command', help='Sub-command help')
+        
+        # Serial interface command
+        serial_parser = subparsers.add_parser('serial', help='Serial interface tools')
+        serial_parser.add_argument('-p', '--port', required=True, help='Serial port (e.g., COM1, /dev/ttyUSB0)')
+        serial_parser.add_argument('-b', '--baudrate', type=int, default=115200, help='Baud rate (default: 115200)')
+        serial_parser.add_argument('-a', '--action', choices=['connect', 'interact', 'sniff'], default='interact', help='Action to perform')
+        serial_parser.add_argument('-t', '--timeout', type=int, default=60, help='Timeout/duration for operations in seconds')
+        
+        # USB interface command
+        usb_parser = subparsers.add_parser('usb', help='USB interface tools')
+        usb_parser.add_argument('-a', '--action', choices=['list', 'find'], default='list', help='Action to perform')
+        usb_parser.add_argument('-v', '--vendor', type=lambda x: int(x, 0), help='Vendor ID (for find action)')
+        usb_parser.add_argument('-p', '--product', type=lambda x: int(x, 0), help='Product ID (for find action)')
+        
+        # JTAG interface command
+        jtag_parser = subparsers.add_parser('jtag', help='JTAG interface tools')
+        jtag_parser.add_argument('-a', '--action', choices=['detect', 'connect', 'idcode', 'dump'], default='detect', help='Action to perform')
+        jtag_parser.add_argument('-i', '--interface', default='ftdi', help='JTAG interface type')
+        jtag_parser.add_argument('--address', type=lambda x: int(x, 0), help='Memory address for dump action')
+        jtag_parser.add_argument('--size', type=int, default=1024, help='Size in bytes for dump action')
+        
+        return parser
+
+    def run(self, args: List[str] = None) -> Dict[str, Any]:
+        """Run the hardware interface module"""
+        if args is None:
+            args = []
+            
+        if args:
+            args = self.args_parser.parse_args(args)
+        else:
+            args = self.args_parser.parse_args()
+        
+        # Handle serial interface commands
+        if hasattr(args, 'command') and args.command == 'serial':
+            serial_interface = SerialInterface(args.port, args.baudrate)
+            
+            if args.action == 'connect':
+                if serial_interface.connect():
+                    return {"status": "success", "message": f"Connected to {args.port} at {args.baudrate} baud"}
+                else:
+                    return {"status": "error", "message": f"Failed to connect to {args.port}"}
+            
+            elif args.action == 'interact':
+                if serial_interface.connect():
+                    serial_interface.interact()
+                    return {"status": "success", "message": "Interactive session completed"}
+                else:
+                    return {"status": "error", "message": f"Failed to connect to {args.port}"}
+            
+            elif args.action == 'sniff':
+                if serial_interface.connect():
+                    credentials = serial_interface.sniff_for_credentials(args.timeout)
+                    return {"status": "success", "credentials": credentials}
+                else:
+                    return {"status": "error", "message": f"Failed to connect to {args.port}"}
+        
+        return {"status": "error", "message": "Invalid or missing command"}
+
 if __name__ == "__main__":
     module = Module()
     result = module.run()

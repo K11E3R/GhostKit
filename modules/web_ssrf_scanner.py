@@ -324,21 +324,26 @@ class Module(BaseModule):
     """GhostKit Web SSRF Scanner Module"""
     
     def __init__(self):
-        super().__init__(
-            name="web_ssrf_scanner",
-            description="Web SSRF Scanner for detecting Server-Side Request Forgery vulnerabilities",
-            author="GhostShellX",
-            version="1.0"
-        )
+        self.name = "web_ssrf_scanner"
+        self.description = "Web SSRF Scanner for detecting Server-Side Request Forgery vulnerabilities"
+        self.author = "GhostShellX"
+        self.version = "1.0"
+        super().__init__()
         
-    def run(self, args: List[str] = None) -> Dict[str, Any]:
-        """Run the SSRF scanner module"""
+    def _create_arg_parser(self) -> argparse.ArgumentParser:
+        """Create an argument parser for the module"""
         parser = argparse.ArgumentParser(description=self.description)
         parser.add_argument('-u', '--url', required=True, help='Target URL')
         parser.add_argument('-p', '--parameter', help='Specific parameter to test')
         parser.add_argument('--proxy', help='Proxy to use (e.g., http://127.0.0.1:8080)')
         parser.add_argument('--cookies', help='Cookies to include (format: name1=value1;name2=value2)')
         parser.add_argument('--headers', help='Custom headers (format: name1:value1;name2:value2)')
+        return parser
+        
+    def run(self, args: List[str] = None) -> Dict[str, Any]:
+        """Run the SSRF scanner module"""
+        if args is None:
+            args = []
         
         if args:
             args = parser.parse_args(args)
