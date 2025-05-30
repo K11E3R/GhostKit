@@ -15,8 +15,8 @@ wireless>=0.3.3
 # Web security testing dependencies
 lxml>=4.9.1
 sslyze>=5.1.0
-dns-resolver>=0.2.1
-xml-detector>=0.3.0
+dnspython>=2.2.1  # For DNS operations
+defusedxml>=0.7.1  # For safe XML processing
 
 # Exploitation dependencies
 impacket>=0.10.0
