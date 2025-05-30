@@ -9,24 +9,32 @@ from unittest.mock import patch, MagicMock
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
+import argparse
+from unittest.mock import patch, MagicMock
+from modules.base_module import BaseModule
+
 try:
     from modules.web_xss_scanner import Module as XSSScanner
 except ImportError:
     # Create a mock for testing if the actual module doesn't exist
-    class XSSScanner:
+    class XSSScanner(BaseModule):
         def __init__(self):
             self.name = "XSS Scanner"
-            self.initialized = False
+            self.description = "Scans for XSS vulnerabilities in web applications"
             self.options = {
                 "target": "",
                 "user_agent": "Mozilla/5.0 GhostKit Security Scanner",
                 "timeout": 10,
                 "verify_ssl": False
             }
+            super().__init__()
             
-        def initialize(self):
-            self.initialized = True
-            return True
+        def _create_arg_parser(self):
+            parser = argparse.ArgumentParser(description=self.description)
+            parser.add_argument('-u', '--url', help='Target URL to scan')
+            parser.add_argument('-a', '--user-agent', help='User agent to use')
+            parser.add_argument('-t', '--timeout', type=int, help='Request timeout in seconds')
+            return parser
             
         def set_option(self, key, value):
             self.options[key] = value
@@ -45,8 +53,14 @@ except ImportError:
                     return True
             return False
             
-        def execute(self, *args, **kwargs):
-            target = self.get_option("target")
+        def run(self, args=None):
+            if args is None:
+                args = []
+                
+            parsed_args = self.args_parser.parse_args(args)
+            
+            # Use args or fall back to options
+            target = parsed_args.url or self.get_option("target")
             if not target:
                 return {"status": "error", "message": "No target specified"}
                 

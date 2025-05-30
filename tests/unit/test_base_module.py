@@ -11,17 +11,26 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 try:
     from modules.base_module import BaseModule
-except ImportError:
-    # Create a mock for testing if the actual module doesn't exist
-    class BaseModule:
-        def __init__(self, name="BaseModule"):
+    
+    # Create a concrete implementation for testing
+    class TestableModule(BaseModule):
+        def __init__(self, name="TestModule"):
             self.name = name
-            self.initialized = False
+            self.description = "Test module for unit testing"
             self.options = {}
+            super().__init__()
             
-        def initialize(self):
-            self.initialized = True
-            return True
+        def _create_arg_parser(self):
+            import argparse
+            parser = argparse.ArgumentParser(description=self.description)
+            parser.add_argument('-t', '--target', help='Target to scan')
+            return parser
+            
+        def run(self, args=None):
+            if args is None:
+                args = []
+            parsed_args = self.args_parser.parse_args(args)
+            return {"status": "success", "message": "Executed", "args": vars(parsed_args)}
             
         def set_option(self, key, value):
             self.options[key] = value
@@ -29,8 +38,49 @@ except ImportError:
         def get_option(self, key, default=None):
             return self.options.get(key, default)
             
-        def execute(self, *args, **kwargs):
-            return {"status": "success", "message": "Executed"}
+except ImportError:
+    # Create a mock for testing if the actual module doesn't exist
+    import argparse
+    
+    class BaseModule:
+        def __init__(self):
+            self.name = self.__class__.__name__
+            self.description = "Base module interface"
+            self.args_parser = self._create_arg_parser()
+            
+        def _create_arg_parser(self):
+            parser = argparse.ArgumentParser(description=self.description)
+            return parser
+            
+        def run(self, args=None):
+            if args is None:
+                args = []
+            parsed_args = self.args_parser.parse_args(args)
+            return {"status": "not_implemented"}
+    
+    class TestableModule(BaseModule):
+        def __init__(self, name="TestModule"):
+            self.name = name
+            self.description = "Test module for unit testing"
+            self.options = {}
+            super().__init__()
+            
+        def _create_arg_parser(self):
+            parser = argparse.ArgumentParser(description=self.description)
+            parser.add_argument('-t', '--target', help='Target to scan')
+            return parser
+            
+        def run(self, args=None):
+            if args is None:
+                args = []
+            parsed_args = self.args_parser.parse_args(args)
+            return {"status": "success", "message": "Executed", "args": vars(parsed_args)}
+            
+        def set_option(self, key, value):
+            self.options[key] = value
+            
+        def get_option(self, key, default=None):
+            return self.options.get(key, default)
 
 
 class TestBaseModule:

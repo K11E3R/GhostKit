@@ -29,3 +29,5 @@ Thumbs.db
 # GhostKit specific
 *.tmp
 *.bak
+
+.coverage
