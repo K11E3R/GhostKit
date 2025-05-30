@@ -144,8 +144,8 @@ GhostKit/
 
 ```bash
 # Clone the repository
-git clone https://github.com/K11E3R/GhostKit-.git
-cd GhostKit-
+git clone https://github.com/K11E3R/GhostKit.git
+cd GhostKit
 
 # Install all dependencies (including development tools)
 pip install -r requirements.txt -r requirements-dev.txt
@@ -480,7 +480,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **GhostShellX** - Security Research & Architecture Design
 
 ### Contributors
-- See the [Contributors](https://github.com/K11E3R/GhostKit-/graphs/contributors) page for a full list of contributors
+- See the [Contributors](https://github.com/K11E3R/GhostKit/graphs/contributors) page for a full list of contributors
 
 ### Acknowledgements
 - Thanks to the open source security community
@@ -491,8 +491,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <div align="center">
   <b>GhostKit</b> - <i>Advancing offensive security through intelligence and automation</i>
   <br>
-  <a href="https://github.com/K11E3R/GhostKit-/issues">Report Bug</a> ·
-  <a href="https://github.com/K11E3R/GhostKit-/issues">Request Feature</a> ·
+  <a href="https://github.com/K11E3R/GhostKit/issues">Report Bug</a> ·
+  <a href="https://github.com/K11E3R/GhostKit/issues">Request Feature</a> ·
   <a href="docs/roadmap.md">View Roadmap</a>
 </div>
 ## 🔒 Security Standards

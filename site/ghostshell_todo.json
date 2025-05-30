@@ -1,0 +1,22 @@
+{
+  "confirmed": true,
+  "tasks": [
+    {"id": 1, "desc": "Create foundational documentation structure", "done": true},
+    {"id": 2, "desc": "Develop comprehensive installation guide with environment setup", "done": true},
+    {"id": 3, "desc": "Write technical architecture deep-dive", "done": true},
+    {"id": 4, "desc": "Document all modules with examples and techniques", "done": true},
+    {"id": 5, "desc": "Create advanced usage playbooks for red team operations", "done": true},
+    {"id": 6, "desc": "Add MITRE ATT&CK mapping for all modules", "done": true},
+    {"id": 7, "desc": "Create threat intelligence integration guide", "done": true},
+    {"id": 8, "desc": "Document API specifications for automation", "done": true},
+    {"id": 9, "desc": "Develop advanced exploitation technique guides", "done": true},
+    {"id": 10, "desc": "Add security advisories and legal considerations", "done": true},
+    {"id": 11, "desc": "Create developer contribution guide with code standards", "done": true},
+    {"id": 12, "desc": "Document plugin development framework", "done": true},
+    {"id": 13, "desc": "Create cybersecurity-themed banner images for documentation", "done": true},
+    {"id": 14, "desc": "Create GhostKit logo for social cards", "done": true},
+    {"id": 15, "desc": "Fix MkDocs navigation configuration", "done": true},
+    {"id": 16, "desc": "Repair broken links in documentation", "done": true},
+    {"id": 17, "desc": "Ensure MkDocs builds without errors", "done": true}
+  ]
+}

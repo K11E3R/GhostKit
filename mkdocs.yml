@@ -3,7 +3,7 @@ site_description: Comprehensive documentation for the GhostKit offensive securit
 site_author: GhostKit Red Team
 
 repo_name: GhostKit
-repo_url: https://github.com/K11E3R/GhostKit-
+repo_url: https://github.com/K11E3R/GhostKit
 
 # Enhanced Material theme with cybersecurity-focused design
 theme:

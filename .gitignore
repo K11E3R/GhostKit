@@ -45,8 +45,6 @@ ENV/
 
 # Documentation builds
 docs/_build/
-docs/site/
-site/
 
 # Secure files that shouldn't be committed
 *.pem
@@ -83,5 +81,20 @@ Thumbs.db
 *.bak
 
 .coverage*
-
 .cache*
+
+# Security-focused exclusions
+*.token
+*.password
+.env.local
+.env.*.local
+local_config.json
+tokens/
+
+# GitHub specific
+.github/.DS_Store
+
+# Generated files that should be built on deployment
+*_generated.md
+generated_docs/
+.netlify/

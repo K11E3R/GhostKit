@@ -25,6 +25,14 @@
     {"id": 21, "desc": "Add performance metrics and convergence indicators to neural_swarm", "done": false},
     {"id": 22, "desc": "Implement MITRE ATT&CK mapping for all exploitation modules", "done": false},
     {"id": 23, "desc": "Create comprehensive module documentation with examples", "done": false},
-    {"id": 24, "desc": "Implement progressive scanning in web modules (passive → active)", "done": false}
+    {"id": 24, "desc": "Implement progressive scanning in web modules (passive → active)", "done": false},
+    
+    {"id": 25, "desc": "[CRITICAL] Remove exposed GitHub token from git remote URL", "done": true},
+    {"id": 26, "desc": "Update .gitignore to exclude sensitive files and build artifacts", "done": true},
+    {"id": 27, "desc": "Update repo URLs in all documentation files to point to new GitHub structure", "done": true},
+    {"id": 28, "desc": "Add/update GitHub-specific files (.github/ISSUE_TEMPLATE, CONTRIBUTING.md, etc.)", "done": true},
+    {"id": 29, "desc": "Configure GitHub Pages for hosting documentation", "done": true},
+    {"id": 30, "desc": "Verify all markdown links are correctly formatted for GitHub rendering", "done": true},
+    {"id": 31, "desc": "Track the fix_broken_links.py, generate_banners.py, and generate_logo.py scripts", "done": true}
   ]
 }
