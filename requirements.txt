@@ -75,7 +75,7 @@ nbconvert==7.16.6
 nbformat==5.10.4
 nltk==3.9.1
 nodeenv==1.9.1
-numpy==2.2.6
+numpy
 packaging==25.0
 pandocfilters==1.5.1
 paramiko==3.5.1
