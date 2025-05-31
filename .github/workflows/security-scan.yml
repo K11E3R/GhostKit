@@ -40,8 +40,7 @@ jobs:
       
       # Upload results for analysis
       - name: Upload scan results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v1
         with:
           name: gitleaks-results
           path: gitleaks-results.sarif
-          if-no-files-found: ignore
