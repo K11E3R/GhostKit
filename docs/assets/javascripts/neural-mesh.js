@@ -47,59 +47,106 @@ class NeuralMesh {
           0.1, 
           1000
         );
+        this.camera.position.z = 5;
       } catch (e) {
-        console.warn('Failed to initialize camera with custom parameters, using defaults', e);
+        console.warn('[GHOST PROTOCOL] Error creating camera with custom parameters, using defaults');
         this.camera = new THREE.PerspectiveCamera();
+        this.camera.position.z = 5;
       }
-      this.camera.position.z = 5;
       
-      // Set up renderer with fallbacks for WebGL compatibility
+      // Set up renderer with maximum safety settings
       try {
+        // If THREE.js was patched in index.html, this will use the safe version
+        // If not, we apply our own safety measures
         this.renderer = new THREE.WebGLRenderer({ 
           canvas: this.canvas,
-          antialias: this.options.renderQuality === 'high',
+          antialias: false, // Disable for better performance and fewer shader issues
           alpha: true,
-          powerPreference: 'high-performance',
-          precision: 'highp'
+          precision: 'lowp', // Use low precision to avoid shader precision issues
+          powerPreference: 'low-power',
+          failIfMajorPerformanceCaveat: false
         });
+        
+        // Set size with pixel ratio limiting to avoid memory issues
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        
+        // Add shader error protection if not already patched
+        const originalRender = this.renderer.render;
+        this.renderer.render = (scene, camera) => {
+          try {
+            return originalRender.call(this.renderer, scene, camera);
+          } catch (e) {
+            console.warn('[GHOST PROTOCOL] Caught WebGL render error:', e.message);
+            // Continue without crashing
+          }
+        };
       } catch (e) {
-        console.warn('Failed to initialize WebGL renderer with advanced options, using basic setup', e);
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
+        console.error('[GHOST PROTOCOL] Critical error creating WebGL renderer:', e);
+        this.initializeFallback2D();
+        return;
       }
       
-      // Configure renderer
-      this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+      // Add lights with reduced complexity
+      try {
+        // Simplified lighting to reduce shader complexity
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        this.scene.add(ambientLight);
+      } catch (e) {
+        console.warn('[GHOST PROTOCOL] Error adding lights:', e);
+      }
       
-      // Add ambient light
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-      this.scene.add(ambientLight);
+      // Generate mesh network with error handling
+      try {
+        this.generateNetwork();
+      } catch (e) {
+        console.error('[GHOST PROTOCOL] Failed to generate network:', e);
+        // Continue with empty scene rather than crashing
+      }
       
-      // Add point light
-      const pointLight = new THREE.PointLight(0xffffff, 0.8);
-      pointLight.position.set(5, 5, 5);
-      this.scene.add(pointLight);
-      
-      // Generate mesh network
-      this.generateNetwork();
-      
-      // Start animation loop
+      // Start animation loop with error catching
       this.animate();
       
-      // Handle window resize
-      window.addEventListener('resize', () => this.onResize());
+      // Add event listeners with cleanup tracking
+      this._eventListeners = [];
+      
+      const addSafeEventListener = (element, event, handler) => {
+        const safeHandler = (...args) => {
+          try {
+            handler(...args);
+          } catch (e) {
+            console.warn(`[GHOST PROTOCOL] Error in ${event} handler:`, e);
+          }
+        };
+        element.addEventListener(event, safeHandler);
+        this._eventListeners.push({element, event, handler: safeHandler});
+      };
+      
+      // Handle window resize with debounce
+      let resizeTimeout;
+      addSafeEventListener(window, 'resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => this.onResize(), 200);
+      });
       
       // Add click handler for node selection
       this.raycaster = new THREE.Raycaster();
       this.mouse = new THREE.Vector2();
-      this.canvas.addEventListener('click', (event) => this.onCanvasClick(event));
+      addSafeEventListener(this.canvas, 'click', (event) => this.onCanvasClick(event));
       
-      // Simulate periodic attacks
-      setInterval(() => this.simulateAttack(), 8000);
-    } catch (e) {
-      console.error('Critical error initializing NeuralMesh:', e);
-      // Add fallback visualization if WebGL fails
-      this.initFallbackVisualization();
+      // Simulate periodic attacks with safer interval
+      this.attackInterval = setInterval(() => {
+        try {
+          this.simulateAttack();
+        } catch (e) {
+          console.warn('[GHOST PROTOCOL] Error in attack simulation:', e);
+        }
+      }, 8000);
+      
+      console.log('[GHOST PROTOCOL] NeuralMesh 3D visualization initialized successfully');
+    } catch (error) {
+      console.error('[GHOST PROTOCOL] Fatal error initializing NeuralMesh:', error);
+      this.initializeFallback2D();
     }
   }
   
