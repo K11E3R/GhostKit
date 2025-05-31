@@ -161,14 +161,24 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs mkdocs-material mkdocstrings mkdocstrings-python mkdocs-git-revision-date-localized-plugin mkdocs-git-committers-plugin "mkdocs-material[imaging]"
+          pip install mkdocs mkdocs-material mkdocstrings mkdocstrings-python mkdocs-git-revision-date-localized-plugin mkdocs-git-committers-plugin "mkdocs-material[imaging]" mkdocs-simple-hooks
       
       - name: Build documentation
         run: |
           mkdocs build --strict
       
-      - name: Upload documentation artifact
+      - name: Create docs directory for GitHub Pages
+        run: |
+          python -c "import sys; from scripts.hooks import copy_to_docs; copy_to_docs({'site_dir': 'site'})"          
+      
+      - name: Upload documentation artifact (site)
         uses: actions/upload-artifact@v4
         with:
-          name: documentation
+          name: documentation-site
           path: site/
+      
+      - name: Upload documentation artifact (docs for GitHub Pages)
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-github-pages
+          path: docs/

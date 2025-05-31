@@ -56,7 +56,7 @@ plugins:
       enabled: !ENV [CI, false]  # Disable in CI environments
   - mkdocs-simple-hooks:
       hooks:
-        post-build: 'scripts.hooks:copy_to_docs'
+        on_post_build: 'scripts.hooks:copy_to_docs'
   - git-committers:
       repository: K11E3R/GhostKit
       branch: master
