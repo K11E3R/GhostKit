@@ -18,8 +18,11 @@ theme:
   palette:
     # Dark mode for proper hacker aesthetic
     scheme: slate
-    primary: black
-    accent: red
+    primary: indigo
+    accent: indigo
+  # Disable social cards until we have a logo
+  social:
+    cards: false
   font:
     text: Roboto
     code: Roboto Mono

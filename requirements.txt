@@ -29,11 +29,19 @@ pyyaml>=6.0
 pwntools>=4.9.0
 
 # Optional dependencies for enhanced functionality
-pillow>=9.3.0  # For image processing
+pillow>=9.3.0  # For image processing and banner generation
 pyserial>=3.5  # For hardware interfaces
 flask>=2.2.2  # For API interfaces
 pyinstaller>=5.6.2  # For creating standalone executables
 pywin32>=305; platform_system == "Windows"  # For Windows-specific functions
+
+# Documentation dependencies
+mkdocs>=1.5.0  # Documentation generator
+mkdocs-material>=9.4.0  # Material theme
+mkdocstrings>=0.23.0  # API documentation
+mkdocstrings-python>=1.7.0  # Python support
+mkdocs-git-revision-date-localized-plugin>=1.2.0  # Git integration
+mkdocs-git-committers-plugin>=2.2.0  # Git contributors
 
 # AI module dependencies
 numpy>=1.23.0  # Required for AI vulnerability analyzer
