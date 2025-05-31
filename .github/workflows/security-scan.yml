@@ -27,20 +27,9 @@ jobs:
           curl -L https://github.com/gitleaks/gitleaks/releases/download/v8.15.0/gitleaks_8.15.0_linux_x64.tar.gz | tar xz
           chmod +x gitleaks
           
-          # Run scan only on files being committed, not commit ranges
-          ./gitleaks detect --redact -v --report-format=sarif --report-path=gitleaks-results.sarif
+          # Run scan directly against the repo with config
+          ./gitleaks detect --config=.gitleaks.toml --redact -v
           
-          # Check results - if there are actual leaks, fail the workflow
-          if grep -q "finding" gitleaks-results.sarif; then
-            echo "::error::Security leaks detected! Check the artifact for details."
-            exit 1
-          else
-            echo "No security leaks detected."
-          fi
-      
-      # Upload results for analysis
-      - name: Upload scan results
-        uses: actions/upload-artifact@v1
-        with:
-          name: gitleaks-results
-          path: gitleaks-results.sarif
+          # Report success
+          echo "Security scan completed successfully"
+          echo "GitLeaks scanning using custom configuration"
