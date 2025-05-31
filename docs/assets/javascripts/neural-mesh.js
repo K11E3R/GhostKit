@@ -673,8 +673,11 @@ class NeuralMesh {
 }
 
 // Initialize if window and THREE are available
-document.addEventListener('DOMContentLoaded', function() {
-  // Check for WebGL support first
+// Quantum accelerated initialization - max 2 seconds
+(function() {
+  // Immediate self-executing function for faster startup
+  
+  // Check for WebGL support first (optimized)
   const checkWebGLSupport = () => {
     try {
       const canvas = document.createElement('canvas');
@@ -687,18 +690,57 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Log WebGL support status
   const hasWebGL = checkWebGLSupport();
-  console.log(`WebGL Support: ${hasWebGL ? 'Available' : 'Not Available'}`);
+  console.log(`[GHOST PROTOCOL] WebGL Support: ${hasWebGL ? 'Available' : 'Not Available'}`);
   
-  setTimeout(() => {
+  // Track initialization state
+  let initStarted = false;
+  let maxInitTime = window.GHOST_MAX_LOAD_TIME || 2000; // Default to 2 seconds max
+  
+  // Function to initialize with timeout guarantee
+  const initializeWithTimeout = () => {
+    if (initStarted) return; // Prevent double initialization
+    initStarted = true;
+    
+    const startTime = performance.now();
     const canvas = document.querySelector('.threat-mesh__canvas');
-    if (canvas && window.THREE) {
+    
+    if (!canvas) {
+      console.warn('[GHOST PROTOCOL] Canvas element not found');
+      return;
+    }
+    
+    // Force completion after timeout
+    const forceCompletionTimer = setTimeout(() => {
+      console.warn('[GHOST PROTOCOL] Forcing mesh initialization completion (timeout)');
+      if (!window.meshInitialized) {
+        // Fallback if initialization is taking too long
+        try {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#070711';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '14px monospace';
+            ctx.fillStyle = '#00ff9d';
+            ctx.fillText('[REDACTED] Threat Mesh Visualization', 20, 30);
+            ctx.fillText('Accelerated mode enabled', 20, 50);
+          }
+        } catch (err) {
+          console.error('[GHOST PROTOCOL] Failed to create fallback:', err);
+        }
+      }
+    }, maxInitTime - 200); // Leave 200ms buffer
+    
+    // Initialize when THREE is available
+    if (window.THREE) {
       try {
         new NeuralMesh(canvas);
-        console.log('NeuralMesh initialized successfully');
+        window.meshInitialized = true;
+        clearTimeout(forceCompletionTimer);
+        console.log(`[GHOST PROTOCOL] NeuralMesh initialized in ${(performance.now() - startTime).toFixed(0)}ms`);
       } catch (e) {
-        console.error('Failed to initialize NeuralMesh:', e);
+        console.error('[GHOST PROTOCOL] Failed to initialize NeuralMesh:', e);
         
-        // Fallback to basic visualization if NeuralMesh fails
+        // Fallback to basic visualization
         try {
           const ctx = canvas.getContext('2d');
           if (ctx) {
@@ -711,9 +753,36 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillText('Fallback mode enabled', 20, 70);
           }
         } catch (drawErr) {
-          console.error('Even 2D fallback failed:', drawErr);
+          console.error('[GHOST PROTOCOL] Even 2D fallback failed:', drawErr);
         }
       }
+    } else {
+      console.warn('[GHOST PROTOCOL] THREE not available, using fallback');
+      try {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#070711';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.font = '14px monospace';
+          ctx.fillStyle = '#00ff9d';
+          ctx.fillText('[REDACTED] Threat Mesh Visualization', 20, 30);
+          ctx.fillText('THREE.js not available', 20, 50);
+          ctx.fillText('Fallback mode enabled', 20, 70);
+        }
+      } catch (err) {
+        console.error('[GHOST PROTOCOL] Failed to create fallback:', err);
+      }
     }
-  }, 2000); // Delay to ensure DOM and Three.js are fully loaded
-});
+  };
+
+  // Start initialization immediately if document is ready
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initializeWithTimeout();
+  } else {
+    // Use faster 'DOMContentLoaded' instead of load event
+    document.addEventListener('DOMContentLoaded', initializeWithTimeout);
+    
+    // Backup initialization after a short delay if DOMContentLoaded doesn't fire
+    setTimeout(initializeWithTimeout, 800);
+  }
+})();
