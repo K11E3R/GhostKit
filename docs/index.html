@@ -384,21 +384,130 @@
         "version": null
       }
     </script>
-    <script src="assets/javascripts/bundle.13a4f30d.min.js"></script>
-    <!-- Load Three.js BEFORE other scripts to ensure proper initialization -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
-    <!-- Handle GitHub API fallbacks -->
+    <script src="assets/javascripts/bundle.13a4f30d.min.js" onerror="console.error('Failed to load bundle.js')"></script>
+    <!-- Block GitHub API requests and fix Three.js issues -->
     <script>
+      // Immediately block any GitHub API requests before they happen
+      (function() {
+        // Create a proxy for XMLHttpRequest
+        const originalXHROpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
+          // Block GitHub API requests
+          if (typeof url === 'string' && (url.includes('github.com') || url.includes('githubusercontent.com'))) {
+            console.warn(`[GHOST PROTOCOL] Blocked GitHub API request to: ${url}`);
+            // Call with a dummy URL instead
+            return originalXHROpen.call(this, method, 'data:text/plain,{"blocked":true}', async, user, password);
+          }
+          return originalXHROpen.call(this, method, url, async, user, password);
+        };
+        
+        // Block fetch requests to GitHub
+        const originalFetch = window.fetch;
+        window.fetch = function(resource, init) {
+          if (typeof resource === 'string' && (resource.includes('github.com') || resource.includes('githubusercontent.com'))) {
+            console.warn(`[GHOST PROTOCOL] Blocked fetch request to: ${resource}`);
+            // Return dummy response
+            return Promise.resolve(new Response(JSON.stringify({blocked: true}), {
+              status: 200,
+              headers: {'Content-Type': 'application/json'}
+            }));
+          }
+          return originalFetch.apply(this, arguments);
+        };
+        
+        console.log('[GHOST PROTOCOL] GitHub API request interceptor initialized');
+      })();
+      
+      // Handle remaining error events
       window.addEventListener('error', function(event) {
-        // Handle GitHub API errors by providing fallback
+        // Block errors from GitHub resources
         if (event.target && (event.target.src || event.target.href)) {
           const url = event.target.src || event.target.href;
           if (url.includes('github.com') || url.includes('githubusercontent.com')) {
-            console.warn('GitHub API resource failed to load, using local fallback');
+            console.warn('[GHOST PROTOCOL] GitHub resource error intercepted');
             event.preventDefault();
+            event.stopPropagation();
+            return false;
           }
         }
       }, true);
+      
+      // Prepare WebGL with defensive initialization
+      window.initializeWebGLSafely = function() {
+        // Check if WebGL is supported at all
+        function isWebGLAvailable() {
+          try {
+            const canvas = document.createElement('canvas');
+            return !!(window.WebGLRenderingContext && 
+              (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+          } catch(e) {
+            return false;
+          }
+        }
+        
+        // Return WebGL support status
+        return isWebGLAvailable();
+      };
+      
+      // Run immediately
+      window.webGLAvailable = window.initializeWebGLSafely();
+      console.log(`[GHOST PROTOCOL] WebGL availability: ${window.webGLAvailable}`);
+    </script>
+    
+    <!-- Load Three.js BEFORE other scripts to ensure proper initialization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js" onerror="console.error('Failed to load Three.js')"></script>
+    
+    <!-- Initialize Three.js safely -->
+    <script>
+      // Patch Three.js methods to prevent shader program errors
+      (function patchThreeJS() {
+        if (typeof THREE === 'undefined') {
+          console.warn('[GHOST PROTOCOL] THREE.js not loaded, cannot patch');
+          return;
+        }
+        
+        try {
+          // Create a safety wrapper for WebGLRenderer
+          const originalWebGLRenderer = THREE.WebGLRenderer;
+          THREE.WebGLRenderer = function(parameters) {
+            try {
+              // Force lower precision for better compatibility
+              parameters = parameters || {};
+              parameters.precision = 'lowp';
+              parameters.powerPreference = 'low-power';
+              parameters.failIfMajorPerformanceCaveat = false;
+              
+              const renderer = new originalWebGLRenderer(parameters);
+              
+              // Override render method to catch shader errors
+              const originalRender = renderer.render;
+              renderer.render = function(scene, camera) {
+                try {
+                  return originalRender.call(this, scene, camera);
+                } catch(e) {
+                  console.warn('[GHOST PROTOCOL] Caught renderer error:', e.message);
+                  // Return silently without crashing
+                }
+              };
+              
+              return renderer;
+            } catch(e) {
+              console.error('[GHOST PROTOCOL] Failed to create WebGLRenderer:', e);
+              // Return a dummy renderer that does nothing
+              return {
+                setSize: function() {},
+                render: function() {},
+                setPixelRatio: function() {},
+                domElement: document.createElement('canvas')
+              };
+            }
+          };
+          
+          console.log('[GHOST PROTOCOL] THREE.js successfully patched for error prevention');
+        } catch(e) {
+          console.error('[GHOST PROTOCOL] Failed to patch THREE.js:', e);
+        }
+      })();
     </script>
     <script src="assets/javascripts/ghostkit-quantum.js"></script>
     <script src="assets/javascripts/neural-mesh.js"></script>
