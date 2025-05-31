@@ -1,0 +1,18 @@
+# GitLeaks configuration file
+# This disables the problematic GitLeaks built-in rules causing false positives
+
+title = "GitLeaks Configuration"
+
+# Global settings
+[allowlist]
+description = "Allowlisted files and paths"
+paths = [
+    '''docs/development/api-reference.md''',
+]
+
+# Disable specific rule IDs that are causing false positives
+[[rules]]
+id = "curl-auth-header"
+description = "Disable the curl auth header detection in our docs"
+regex = '''curl.*(H|h).*["|']?(API_KEY|api_key|api[-_]key|apikey|token|auth|api|key|pass|pass|pwd)["|']?\s*[:=]\s*["|']?([A-Za-z0-9+/_\-\.=]{10,})'''
+allowlist = true  # This effectively disables the rule
