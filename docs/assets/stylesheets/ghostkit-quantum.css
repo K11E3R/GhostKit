@@ -1,0 +1,370 @@
+/* GhostKit Quantum CSS - Unhuman Level Enhancements */
+
+:root {
+  --ghost-primary: #00ff9d;
+  --ghost-secondary: #ff003c;
+  --ghost-accent: #7700ff;
+  --ghost-dark: #0f0f1a;
+  --ghost-darker: #070711;
+  --ghost-glow: 0 0 10px var(--ghost-primary), 0 0 20px rgba(0, 255, 157, 0.5);
+  --ghost-text-glow: 0 0 3px var(--ghost-primary);
+}
+
+/* Neuromorphic UI - Organic interface that adapts to user behavior */
+body {
+  transition: background-color 2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  animation: subtle-breathing 12s infinite ease-in-out;
+}
+
+.neuromorphic-element {
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(15, 15, 26, 0.7), rgba(7, 7, 17, 0.8));
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.25),
+              -8px -8px 16px rgba(35, 35, 50, 0.1);
+  transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.neuromorphic-element:hover {
+  box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.3),
+              -12px -12px 24px rgba(35, 35, 50, 0.15),
+              0 0 15px rgba(0, 255, 157, 0.4);
+}
+
+/* Reality-Breach Animations - Glitch effects that simulate penetration of digital reality */
+@keyframes reality-breach {
+  0% { clip-path: inset(0 0 0 0); }
+  5% { clip-path: inset(34% 0 61% 0); }
+  10% { clip-path: inset(4% 0 82% 0); }
+  15% { clip-path: inset(38% 0 43% 0); }
+  20% { clip-path: inset(72% 0 2% 0); }
+  25% { clip-path: inset(0 0 0 0); filter: hue-rotate(90deg); }
+  30% { clip-path: inset(67% 0 11% 0); }
+  35% { clip-path: inset(32% 0 12% 0); }
+  40% { clip-path: inset(16% 0 84% 0); }
+  45% { clip-path: inset(2% 0 33% 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  55% { clip-path: inset(40% 0 43% 0); }
+  60% { clip-path: inset(0 0 0 0); filter: hue-rotate(180deg); }
+  65% { clip-path: inset(63% 0 11% 0); }
+  70% { clip-path: inset(10% 0 50% 0); }
+  75% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+.reality-breach {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.reality-breach:hover::before,
+.reality-breach:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  animation: reality-breach 2s infinite;
+}
+
+.reality-breach:hover::before {
+  color: var(--ghost-secondary);
+  transform: translateX(-3px);
+  clip-path: inset(0 0 0 0);
+}
+
+.reality-breach:hover::after {
+  color: var(--ghost-accent);
+  transform: translateX(3px);
+  clip-path: inset(0 0 0 0);
+  animation-delay: 0.2s;
+}
+
+/* Digital Twin Documentation - Content mirrors across visible/hidden dimensions */
+.digital-twin-container {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.5s ease;
+}
+
+.digital-twin-content {
+  position: relative;
+  transition: all 0.5s ease;
+}
+
+.digital-twin-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 65%, var(--ghost-primary) 85%, transparent 90%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  filter: blur(4px);
+}
+
+.digital-twin-container:hover .digital-twin-content::before {
+  opacity: 0.5;
+  animation: scan-line 1.5s linear infinite;
+}
+
+@keyframes scan-line {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Biomimetic Scrolling - Interface that breathes like a living organism */
+@keyframes subtle-breathing {
+  0%, 100% { background-size: 100% 100%; }
+  50% { background-size: 101% 101%; }
+}
+
+.breathing-section {
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: subtle-breathing 8s infinite ease-in-out;
+  transform-origin: center;
+}
+
+.breathing-section:hover {
+  animation-duration: 3s;
+}
+
+/* Ghost Protocol Initiation - Staged boot sequence with classified visuals */
+.ghost-protocol {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--ghost-darker);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+  font-family: "Courier New", monospace;
+  color: var(--ghost-primary);
+  overflow: hidden;
+}
+
+.ghost-protocol__logo {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 2rem;
+}
+
+.ghost-protocol__text {
+  font-size: 1.2rem;
+  text-align: left;
+  max-width: 80%;
+  margin: 0 auto;
+  white-space: pre;
+}
+
+.ghost-protocol__progress {
+  width: 60%;
+  height: 8px;
+  background-color: rgba(0, 255, 157, 0.1);
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.ghost-protocol__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: var(--ghost-primary);
+  box-shadow: 0 0 10px var(--ghost-primary);
+  transition: width 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+.ghost-protocol__status {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  opacity: 0.8;
+}
+
+/* Quantum Documentation - Content exists in superposition states */
+.quantum-content {
+  position: relative;
+  overflow: hidden;
+}
+
+.quantum-content::before {
+  content: attr(data-quantum-state);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(7, 7, 17, 0.9);
+  color: var(--ghost-primary);
+  text-shadow: var(--ghost-text-glow);
+}
+
+.quantum-content:hover::before {
+  opacity: 1;
+}
+
+/* Reality Distortion Field - Subtle visual anomalies based on mouse movement */
+.reality-distortion {
+  position: relative;
+  overflow: hidden;
+}
+
+.reality-distortion__field {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                              rgba(0, 255, 157, 0.15), 
+                              transparent 30%);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reality-distortion:hover .reality-distortion__field {
+  opacity: 1;
+}
+
+/* Consciousness Injection - Elements with autonomous awareness */
+.conscious-element {
+  position: relative;
+}
+
+.conscious-element::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.conscious-element.active::after {
+  border-color: var(--ghost-primary);
+  box-shadow: var(--ghost-glow);
+  animation: consciousness-pulse 3s infinite;
+}
+
+@keyframes consciousness-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.02); opacity: 0.8; }
+}
+
+/* Threat Mesh Visualization - For 3D attack path prediction */
+.threat-mesh {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  background-color: var(--ghost-darker);
+  border-radius: 8px;
+}
+
+.threat-mesh__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Neural Typewriter - Text that rewrites itself */
+.neural-typewriter {
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-typewriter__text {
+  display: inline;
+  position: relative;
+}
+
+.neural-typewriter__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: var(--ghost-primary);
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* General enhancement styles */
+.glow-text {
+  color: var(--ghost-primary);
+  text-shadow: var(--ghost-text-glow);
+}
+
+.glow-border {
+  border: 1px solid var(--ghost-primary);
+  box-shadow: var(--ghost-glow);
+}
+
+.code-glow {
+  position: relative;
+}
+
+.code-glow::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, var(--ghost-primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.code-glow:hover::after {
+  opacity: 0.1;
+  animation: code-scan 2s linear infinite;
+}
+
+@keyframes code-scan {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ghost-protocol__text {
+    font-size: 0.9rem;
+  }
+  
+  .ghost-protocol__logo {
+    width: 150px;
+    height: 150px;
+  }
+}

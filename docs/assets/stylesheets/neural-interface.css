@@ -1,0 +1,550 @@
+/* Neural Interface CSS - Biomimetic and consciousness simulation overlay 
+   Part of GhostKit Quantum Level enhancements Mode 6 */
+
+:root {
+  --neural-primary: #00f9ff;
+  --neural-secondary: #ff00ee;
+  --neural-tertiary: #fbff00;
+  --neural-dark: #08080f;
+  --neural-light: #f0f0ff;
+  --neural-pulse: 0 0 15px var(--neural-primary), 0 0 30px rgba(0, 249, 255, 0.4);
+  --neural-synapse-speed: 1.5s;
+}
+
+/* Neural mesh shockwave effect */
+.neural-mesh-shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: 0 0 10px 2px var(--neural-primary);
+  z-index: 10;
+  pointer-events: none;
+  animation: neural-shockwave 2s cubic-bezier(0, 0.75, 0.25, 1) forwards;
+}
+
+@keyframes neural-shockwave {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+    border: 2px solid var(--neural-primary);
+  }
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+    border: 1px solid var(--neural-primary);
+  }
+}
+
+/* Neural synapses that dynamically form between elements */
+.neural-synapse {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--neural-primary), 
+    var(--neural-secondary), 
+    transparent
+  );
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  filter: blur(0.5px);
+  animation: synapse-pulse var(--neural-synapse-speed) ease-in-out infinite;
+}
+
+@keyframes synapse-pulse {
+  0%, 100% {
+    opacity: 0;
+    background-position: -100% 0;
+  }
+  50% {
+    opacity: 0.7;
+    background-position: 200% 0;
+  }
+}
+
+/* Biomimetic behavior for page elements */
+.biomimetic-element {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.biomimetic-element::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(0, 249, 255, 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.biomimetic-element:hover::before {
+  opacity: 1;
+}
+
+/* Consciousness simulation - element awareness */
+.consciousness-indicator {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--neural-primary);
+  box-shadow: 0 0 5px var(--neural-primary);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+/* Neural overlay effect - appears during scroll */
+.neural-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at center, transparent 0%, rgba(8, 8, 15, 0.9) 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%2300f9ff" stroke-width="0.5" stroke-opacity="0.1"/></svg>');
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: opacity 0.5s ease;
+}
+
+.neural-overlay.active {
+  opacity: 0.3;
+}
+
+/* Neural scan lines */
+.neural-scan-line {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--neural-primary), 
+    var(--neural-secondary), 
+    transparent
+  );
+  opacity: 0.5;
+  z-index: 9999;
+  pointer-events: none;
+  filter: blur(1px);
+  box-shadow: 0 0 10px var(--neural-primary);
+}
+
+/* Neural feedback system - responds to user actions */
+.neural-feedback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 249, 255, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  z-index: 9997;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity 0.5s ease;
+}
+
+.neural-feedback.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Neural text - simulates AI thinking */
+.neural-text {
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(0, 249, 255, 0.2) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  animation: neural-scan 3s ease-in-out infinite;
+}
+
+@keyframes neural-scan {
+  0% {
+    left: -100%;
+    opacity: 0.7;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Neural interfaces for form elements */
+input.neural-input, 
+textarea.neural-input,
+select.neural-input {
+  background: rgba(8, 8, 15, 0.8);
+  border: 1px solid var(--neural-primary);
+  border-radius: 4px;
+  color: var(--neural-light);
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 0 5px rgba(0, 249, 255, 0.2);
+}
+
+input.neural-input:focus, 
+textarea.neural-input:focus,
+select.neural-input:focus {
+  outline: none;
+  border-color: var(--neural-secondary);
+  box-shadow: var(--neural-pulse);
+}
+
+/* Neural buttons */
+.neural-button {
+  background: rgba(8, 8, 15, 0.8);
+  border: 1px solid var(--neural-primary);
+  color: var(--neural-primary);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(0, 249, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.neural-button:hover {
+  background: rgba(0, 249, 255, 0.1);
+  box-shadow: var(--neural-pulse);
+}
+
+.neural-button:hover::before {
+  left: 100%;
+}
+
+/* Neural particles */
+.neural-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Neural awareness indicator */
+.neural-awareness {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--neural-dark);
+  border: 1px solid var(--neural-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 249, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.neural-awareness::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neural-primary);
+  animation: awareness-pulse 2s ease-in-out infinite;
+}
+
+@keyframes awareness-pulse {
+  0%, 100% {
+    transform: scale(1);
+    background: var(--neural-primary);
+  }
+  50% {
+    transform: scale(1.5);
+    background: var(--neural-secondary);
+  }
+}
+
+.neural-awareness:hover {
+  transform: scale(1.1);
+  box-shadow: var(--neural-pulse);
+}
+
+/* Neural code blocks */
+pre.neural-code {
+  background: var(--neural-dark);
+  border: 1px solid var(--neural-primary);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+pre.neural-code::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--neural-primary);
+  box-shadow: 0 0 10px var(--neural-primary);
+  z-index: 1;
+  animation: code-line-scan 3s linear infinite;
+}
+
+@keyframes code-line-scan {
+  0% {
+    top: 0;
+    height: 10%;
+  }
+  50% {
+    top: 90%;
+    height: 10%;
+  }
+  51% {
+    top: 0;
+    height: 0;
+  }
+  100% {
+    top: 0;
+    height: 10%;
+  }
+}
+
+/* Neural focus trap - creates a visual focus effect */
+.neural-focus-trap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    transparent 30%,
+    rgba(8, 8, 15, 0.95) 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9996;
+  transition: opacity 0.5s ease;
+}
+
+.neural-focus-trap.active {
+  opacity: 1;
+}
+
+/* Neural progress indicators */
+.neural-progress {
+  height: 4px;
+  background: rgba(8, 8, 15, 0.8);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-progress::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--neural-primary),
+    var(--neural-secondary)
+  );
+  width: var(--progress, 0%);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--neural-primary);
+}
+
+/* Neural tabs */
+.neural-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--neural-primary);
+}
+
+.neural-tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-tab.active {
+  color: var(--neural-primary);
+}
+
+.neural-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--neural-primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.neural-tab.active::after {
+  transform: scaleX(1);
+}
+
+.neural-tab-content {
+  padding: 16px;
+  display: none;
+}
+
+.neural-tab-content.active {
+  display: block;
+}
+
+/* Interactive neural elements */
+.neural-interactive {
+  position: relative;
+  cursor: pointer;
+}
+
+.neural-interactive::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.neural-interactive:hover::before {
+  border-color: var(--neural-primary);
+  box-shadow: var(--neural-pulse);
+}
+
+/* Apply these neural effects to specific elements */
+.md-header, .md-sidebar, .md-content {
+  position: relative;
+}
+
+.md-content {
+  z-index: 1;
+}
+
+/* Add neural system to mkdocs elements */
+.md-header {
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.md-header:hover {
+  border-bottom-color: var(--neural-primary);
+}
+
+.md-nav__item {
+  transition: all 0.3s ease;
+}
+
+.md-nav__item:hover {
+  color: var(--neural-primary);
+}
+
+.md-nav__link {
+  position: relative;
+}
+
+.md-nav__link::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -15px;
+  width: 0;
+  height: 1px;
+  background: var(--neural-primary);
+  transition: width 0.3s ease;
+}
+
+.md-nav__link:hover::before {
+  width: 10px;
+}
+
+code {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+code:hover {
+  color: var(--neural-primary);
+  text-shadow: 0 0 5px rgba(0, 249, 255, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .neural-awareness {
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .neural-focus-trap,
+  .neural-overlay {
+    display: none;
+  }
+}
