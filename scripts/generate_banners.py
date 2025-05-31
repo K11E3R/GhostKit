@@ -1,123 +1,156 @@
 #!/usr/bin/env python3
 """
-Tactical Banner Generator for GhostKit Documentation
-Creates cyberpunk-themed banner images for each section of the documentation.
+GhostKit Banner Generator
+Generates cybersecurity-themed banner images for documentation
 """
 
 import os
 import random
 import sys
-from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-# Banner titles from error logs
-BANNER_TITLES = {
-    "exploitation-banner.png": "EXPLOITATION TECHNIQUES",
-    "threat-intel-banner.png": "THREAT INTELLIGENCE",
+# Configuration
+OUTPUT_DIR = "docs/assets/images"
+WIDTH = 1200
+HEIGHT = 200
+BG_COLOR = (10, 10, 10)
+TEXT_COLOR = (0, 255, 0)
+ACCENT_COLOR = (120, 0, 255)
+SECONDARY_COLOR = (0, 180, 255)
+
+# Banner definitions - file_name -> title
+BANNERS = {
     "architecture-banner.png": "ARCHITECTURE",
+    "quickstart-banner.png": "QUICKSTART",
+    "web-scanner-banner.png": "WEB SCANNER",
+    "opsec-banner.png": "OPERATIONAL SECURITY",
+    "mitre-banner.png": "MITRE ATT&CK MAPPING",
+    "threat-intel-banner.png": "THREAT INTELLIGENCE",
     "api-banner.png": "API REFERENCE",
+    "exploitation-banner.png": "EXPLOITATION TECHNIQUES",
+    "legal-banner.png": "SECURITY ADVISORIES",
     "contribution-banner.png": "CONTRIBUTION GUIDE",
     "plugin-banner.png": "PLUGIN DEVELOPMENT",
-    "ghostkit-banner.png": "GHOSTKIT FRAMEWORK",
-    "quickstart-banner.png": "QUICKSTART",
-    "legal-banner.png": "SECURITY ADVISORIES",
-    "web-scanner-banner.png": "WEB SCANNER",
-    "mitre-banner.png": "MITRE ATT&CK MAPPING",
-    "opsec-banner.png": "OPERATIONAL SECURITY",
     "overview-banner.png": "GHOSTKIT OVERVIEW",
+    "ghostkit-banner.png": "GHOSTKIT FRAMEWORK",
 }
 
 
-def create_cyberpunk_banner(title, output_path, width=1200, height=300):
-    """Create a cyberpunk-themed banner with the given title."""
-    # Create base image with black background
-    img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-    draw = ImageDraw.Draw(img)
+def create_matrix_effect(draw, width, height):
+    """Create a Matrix-style digital rain effect"""
+    chars = "01GHO5TK1+*><)(?/\\"
+    font = ImageFont.truetype("arial.ttf", 14)
 
-    # Add grid pattern
-    grid_color = (0, 80, 100, 50)
-    grid_spacing = 20
-    for x in range(0, width, grid_spacing):
-        draw.line([(x, 0), (x, height)], fill=grid_color, width=1)
-    for y in range(0, height, grid_spacing):
-        draw.line([(0, y), (width, y)], fill=grid_color, width=1)
+    for i in range(0, width, 15):
+        char_count = random.randint(5, 30)
+        y_start = random.randint(-100, 100)
 
-    # Add random digital glitch effects
-    for _ in range(25):
-        x = random.randint(0, width)
-        y = random.randint(0, height)
-        glitch_width = random.randint(50, 400)
-        glitch_height = random.randint(5, 20)
+        for j in range(char_count):
+            y_pos = y_start + j * 15
+            if 0 <= y_pos < height:
+                char = random.choice(chars)
+                opacity = int(255 * (1 - j / char_count) * 0.7)
+                color = (0, min(255, random.randint(180, 255)), 0, opacity)
+                draw.text((i, y_pos), char, fill=color, font=font)
 
-        # Random cyberpunk color for the glitch
-        glitch_colors = [
-            (255, 0, 128, 128),  # Neon pink
-            (0, 255, 255, 128),  # Cyan
-            (128, 0, 255, 128),  # Purple
-            (0, 255, 128, 128),  # Neon green
-        ]
 
-        glitch_color = random.choice(glitch_colors)
-        draw.rectangle([x, y, x + glitch_width, y + glitch_height], fill=glitch_color)
+def draw_circuit_lines(draw, width, height):
+    """Draw circuit-board style lines"""
+    for _ in range(20):
+        x1 = random.randint(0, width)
+        y1 = random.randint(0, height)
+        length = random.randint(50, 150)
+        direction = random.choice([(1, 0), (0, 1), (1, 1), (-1, 1)])
 
-    # Draw a main diagonal line
-    line_color = (0, 255, 255, 200)  # Cyan with transparency
-    draw.line([(0, height), (width, 0)], fill=line_color, width=10)
+        x2 = x1 + direction[0] * length
+        y2 = y1 + direction[1] * length
 
-    # Add text shadow for depth
-    try:
-        # Try to load a futuristic font if available
-        font = ImageFont.truetype("Arial Bold", 70)
-    except IOError:
-        # Fallback to default font
-        font = ImageFont.load_default().font_variant(size=70)
-
-    # Draw text shadow
-    shadow_color = (0, 200, 255, 100)  # Cyan shadow
-    for offset in range(1, 6, 2):
-        draw.text(
-            (width // 2 - 2 + offset, height // 2 - 2 + offset),
-            title,
-            font=font,
-            fill=shadow_color,
-            anchor="mm",
+        # Random color from our palette
+        color = random.choice(
+            [
+                (ACCENT_COLOR[0], ACCENT_COLOR[1], ACCENT_COLOR[2], 150),
+                (SECONDARY_COLOR[0], SECONDARY_COLOR[1], SECONDARY_COLOR[2], 150),
+                (TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2], 100),
+            ]
         )
 
-    # Draw main text
-    text_color = (255, 255, 255, 255)  # White
-    draw.text((width // 2, height // 2), title, font=font, fill=text_color, anchor="mm")
+        width = random.randint(1, 3)
+        draw.line([(x1, y1), (x2, y2)], fill=color, width=width)
 
-    # Add scanlines effect
-    scanlines = Image.new("RGBA", (width, height), color=(0, 0, 0, 0))
-    scanlines_draw = ImageDraw.Draw(scanlines)
-    for y in range(0, height, 4):
-        scanlines_draw.line([(0, y), (width, y)], fill=(0, 0, 0, 50), width=1)
 
-    # Compose the final image
-    img = Image.alpha_composite(img, scanlines)
+def create_banner(filename, title):
+    """Create a cybersecurity-themed banner with title"""
+    img = Image.new("RGBA", (WIDTH, HEIGHT), BG_COLOR + (255,))
+    draw = ImageDraw.Draw(img)
+
+    # Add matrix digital rain effect
+    create_matrix_effect(draw, WIDTH, HEIGHT)
+
+    # Add circuit lines
+    draw_circuit_lines(draw, WIDTH, HEIGHT)
+
+    # Apply slight blur
+    img = img.filter(ImageFilter.GaussianBlur(radius=1))
+    draw = ImageDraw.Draw(img)
+
+    # Add title text
+    try:
+        title_font = ImageFont.truetype("arial.ttf", 48)
+    except IOError:
+        title_font = ImageFont.load_default()
+
+    # Text shadow
+    shadow_offset = 2
+    draw.text(
+        (WIDTH // 2 - shadow_offset, HEIGHT // 2 - shadow_offset),
+        title,
+        fill=(0, 0, 0, 180),
+        font=title_font,
+        anchor="mm",
+    )
+
+    # Main text
+    draw.text(
+        (WIDTH // 2, HEIGHT // 2),
+        title,
+        fill=(220, 220, 220, 255),
+        font=title_font,
+        anchor="mm",
+    )
+
+    # Add "GhostKit" watermark
+    try:
+        small_font = ImageFont.truetype("arial.ttf", 14)
+    except IOError:
+        small_font = ImageFont.load_default()
+
+    draw.text(
+        (WIDTH - 10, HEIGHT - 10),
+        "GhostKit",
+        fill=(200, 200, 200, 128),
+        font=small_font,
+        anchor="rb",
+    )
 
     # Save the image
+    output_path = os.path.join(OUTPUT_DIR, filename)
     img.save(output_path)
     print(f"Created banner: {output_path}")
 
 
 def main():
-    """Generate all banners for the GhostKit documentation."""
-    # Determine the output directory
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.dirname(script_dir)
-    output_dir = os.path.join(base_dir, "mkdocs-src", "assets", "images")
+    """Main function to generate all banners"""
+    print(f"Generating {len(BANNERS)} banner images...")
 
-    # Ensure the output directory exists
-    os.makedirs(output_dir, exist_ok=True)
+    # Create output directory if it doesn't exist
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Generate each banner
-    for banner_file, title in BANNER_TITLES.items():
-        output_path = os.path.join(output_dir, banner_file)
-        create_cyberpunk_banner(title, output_path)
+    for filename, title in BANNERS.items():
+        create_banner(filename, title)
 
-    print(f"All {len(BANNER_TITLES)} banners generated successfully in: {output_dir}")
+    print("Banner generation complete!")
 
 
 if __name__ == "__main__":

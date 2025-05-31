@@ -1,145 +1,148 @@
 #!/usr/bin/env python3
 """
-Tactical Logo Generator for GhostKit
-Creates a cyberpunk-themed logo for the framework.
+GhostKit Logo Generator
+Creates a professional cybersecurity-themed logo for the GhostKit toolkit
 """
 
 import os
-import sys
-from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
+
+# Configuration
+OUTPUT_DIR = "docs/assets/images"
+SIZE = (512, 512)
+BG_COLOR = (20, 20, 20, 255)
+PRIMARY_COLOR = (0, 255, 0, 255)  # Matrix green
+ACCENT_COLOR = (128, 0, 255, 255)  # Purple accent
 
 
-def create_cyberpunk_logo(output_path, size=512):
-    """Create a cyberpunk-themed logo for GhostKit."""
-    # Create a square image with transparent background
-    img = Image.new("RGBA", (size, size), color=(0, 0, 0, 0))
+def create_ghost_logo():
+    """Create the GhostKit logo with a ghost silhouette and circuit board elements"""
+    # Create base image with transparent background
+    img = Image.new("RGBA", SIZE, (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    # Calculate dimensions
-    center = size // 2
-    outer_radius = size * 0.45
-    inner_radius = size * 0.35
+    # Create circular background
+    center = (SIZE[0] // 2, SIZE[1] // 2)
+    radius = min(SIZE) // 2 - 10
 
-    # Draw outer circle (ghost outline)
+    # Draw filled circle with dark background
     draw.ellipse(
-        [
-            (center - outer_radius, center - outer_radius),
-            (center + outer_radius, center + outer_radius),
-        ],
-        outline=(0, 255, 255, 200),  # Cyan
-        width=4,
+        (
+            center[0] - radius,
+            center[1] - radius,
+            center[0] + radius,
+            center[1] + radius,
+        ),
+        fill=BG_COLOR,
     )
 
-    # Draw inner circle (ghost head)
-    draw.ellipse(
-        [
-            (center - inner_radius, center - inner_radius),
-            (center + inner_radius, center + inner_radius),
-        ],
-        fill=(0, 0, 0, 180),
-        outline=(255, 0, 128, 200),  # Neon pink
-        width=3,
-    )
+    # Draw ghost silhouette
+    ghost_width = radius * 1.2
+    ghost_height = radius * 1.5
+    ghost_top = center[1] - ghost_height // 2 + 20  # Adjust position
 
-    # Draw eyes (cyberpunk style)
-    eye_radius = size * 0.07
-    eye_offset = size * 0.12
+    # Ghost head (rounded rectangle)
+    head_radius = ghost_width // 4
+    ghost_body_points = [
+        # Top rounded part
+        (center[0] - ghost_width // 2 + head_radius, ghost_top),
+        (center[0] + ghost_width // 2 - head_radius, ghost_top),
+        # Right side
+        (center[0] + ghost_width // 2, ghost_top + head_radius),
+        (center[0] + ghost_width // 2, ghost_top + ghost_height - head_radius),
+        # Bottom zigzag (3 points for ghost-like bottom)
+        (center[0] + ghost_width // 3, ghost_top + ghost_height),
+        (center[0], ghost_top + ghost_height - head_radius),
+        (center[0] - ghost_width // 3, ghost_top + ghost_height),
+        # Left side
+        (center[0] - ghost_width // 2, ghost_top + ghost_height - head_radius),
+        (center[0] - ghost_width // 2, ghost_top + head_radius),
+    ]
+
+    # Draw ghost body
+    draw.polygon(ghost_body_points, fill=PRIMARY_COLOR)
+
+    # Add ghost eyes (two small circles)
+    eye_radius = ghost_width // 12
+    eye_y = ghost_top + ghost_height // 4
+    eye_spacing = ghost_width // 4
 
     # Left eye
     draw.ellipse(
-        [
-            (center - eye_offset - eye_radius, center - eye_radius),
-            (center - eye_offset + eye_radius, center + eye_radius),
-        ],
-        fill=(0, 255, 255, 220),  # Cyan
+        (
+            center[0] - eye_spacing - eye_radius,
+            eye_y - eye_radius,
+            center[0] - eye_spacing + eye_radius,
+            eye_y + eye_radius,
+        ),
+        fill=BG_COLOR,
     )
 
     # Right eye
     draw.ellipse(
-        [
-            (center + eye_offset - eye_radius, center - eye_radius),
-            (center + eye_offset + eye_radius, center + eye_radius),
-        ],
-        fill=(0, 255, 255, 220),  # Cyan
+        (
+            center[0] + eye_spacing - eye_radius,
+            eye_y - eye_radius,
+            center[0] + eye_spacing + eye_radius,
+            eye_y + eye_radius,
+        ),
+        fill=BG_COLOR,
     )
 
-    # Add digital glitch effects
-    for i in range(10):
-        x_offset = i * 5
-        y_offset = size // 2 - 10 * i
-        width = size // 3
-        height = 4
+    # Add circuit board traces
+    for i in range(5):
+        # Horizontal traces
+        y = ghost_top + ghost_height + 10 + i * 15
+        if y < SIZE[1] - 20:
+            line_start = center[0] - radius + 30
+            line_end = center[0] + radius - 30
+            draw.line([(line_start, y), (line_end, y)], fill=ACCENT_COLOR, width=3)
 
-        # Alternate glitch colors
-        if i % 2 == 0:
-            glitch_color = (255, 0, 128, 100)  # Pink
-        else:
-            glitch_color = (0, 255, 255, 100)  # Cyan
+            # Add small connecting verticals
+            if i % 2 == 0 and i > 0:
+                vert_x = line_start + (line_end - line_start) * (i / 5)
+                draw.line([(vert_x, y), (vert_x, y - 15)], fill=ACCENT_COLOR, width=3)
 
-        draw.rectangle(
-            [
-                (center - width // 2 + x_offset, y_offset),
-                (center + width // 2 + x_offset, y_offset + height),
-            ],
-            fill=glitch_color,
-        )
+    # Add outer glow effect
+    glowing = img.copy()
+    glowing = glowing.filter(ImageFilter.GaussianBlur(radius=5))
+    glowing_draw = ImageDraw.Draw(glowing)
 
-    # Add "GK" letters in the center
+    # Merge the glowing layer beneath the original
+    result = Image.new("RGBA", SIZE, (0, 0, 0, 0))
+    result.paste(glowing, (0, 0), glowing)
+    result.alpha_composite(img)
+
+    # Add text "GHOSTKIT" at the bottom
     try:
-        # Try to load a futuristic font if available
-        font = ImageFont.truetype("Arial Bold", size // 4)
+        font = ImageFont.truetype("arial.ttf", 40)
     except IOError:
-        # Fallback to default font
-        font = ImageFont.load_default().font_variant(size=size // 4)
+        font = ImageFont.load_default()
 
-    # Draw text with glow effect
-    glow_color = (0, 255, 255, 100)  # Cyan glow
-    text_color = (255, 255, 255, 230)  # White text
+    # Add "GHOSTKIT" text
+    text_y = center[1] + radius - 60
+    draw = ImageDraw.Draw(result)
 
-    for offset in range(1, 6, 2):
-        draw.text(
-            (center + offset, center + offset),
-            "GK",
-            font=font,
-            fill=glow_color,
-            anchor="mm",
-        )
+    # Draw text shadow
+    draw.text(
+        (center[0] + 2, text_y + 2),
+        "GHOSTKIT",
+        fill=(0, 0, 0, 200),
+        font=font,
+        anchor="ms",
+    )
 
-    draw.text((center, center), "GK", font=font, fill=text_color, anchor="mm")
+    # Draw main text
+    draw.text(
+        (center[0], text_y), "GHOSTKIT", fill=PRIMARY_COLOR, font=font, anchor="ms"
+    )
 
-    # Add subtle scanlines
-    scanlines = Image.new("RGBA", (size, size), color=(0, 0, 0, 0))
-    scanlines_draw = ImageDraw.Draw(scanlines)
-
-    for y in range(0, size, 4):
-        scanlines_draw.line([(0, y), (size, y)], fill=(0, 0, 0, 20), width=1)
-
-    # Apply scanlines
-    img = Image.alpha_composite(img, scanlines)
-
-    # Save the image
-    img.save(output_path)
-    print(f"Created logo: {output_path}")
-    return True
-
-
-def main():
-    """Generate the GhostKit logo."""
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.dirname(script_dir)
-
-    # Create logo in both mkdocs-src and docs directories
-    for dir_name in ["mkdocs-src", "docs"]:
-        output_dir = os.path.join(base_dir, dir_name, "assets", "images")
-        os.makedirs(output_dir, exist_ok=True)
-
-        output_path = os.path.join(output_dir, "ghostkit-logo.png")
-        create_cyberpunk_logo(output_path)
-
-    print("🔮 GhostKit Logo Generation Complete")
+    # Save as PNG with transparency
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    result.save(os.path.join(OUTPUT_DIR, "ghostkit-logo.png"))
+    print(f"Logo created at {OUTPUT_DIR}/ghostkit-logo.png")
 
 
 if __name__ == "__main__":
-    main()
+    create_ghost_logo()

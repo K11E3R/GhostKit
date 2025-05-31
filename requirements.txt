@@ -41,7 +41,7 @@ mkdocs-material>=9.4.0  # Material theme
 mkdocstrings>=0.23.0  # API documentation
 mkdocstrings-python>=1.7.0  # Python support
 mkdocs-git-revision-date-localized-plugin>=1.2.0  # Git integration
-mkdocs-git-committers-plugin>=2.2.0  # Git contributors
+mkdocs-git-committers-plugin  # Git contributors
 
 # AI module dependencies
 numpy>=1.23.0  # Required for AI vulnerability analyzer
