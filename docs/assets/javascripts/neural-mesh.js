@@ -207,98 +207,121 @@ class NeuralMesh {
           let geometry;
           
           try {
-            geometry = new THREE.SphereGeometry(
-              isVulnerable ? 0.08 : 0.05, 
-              16, 
-              16
-            );
-          } catch (e) {
-            console.warn('Failed to create custom sphere geometry, using default', e);
-            geometry = new THREE.SphereGeometry(0.05);
-          }
           
-          // Node material with proper shader handling
-          let material;
-          try {
-            // Use MeshStandardMaterial instead of MeshPhongMaterial for better shader compatibility
-            material = new THREE.MeshStandardMaterial({
-              color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-              emissive: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-              emissiveIntensity: 0.3,
-              transparent: true,
-              opacity: 0.8,
-              roughness: 0.5,
-              metalness: 0.7
-            });
-          } catch (e) {
-            console.warn('Failed to create custom material, using default', e);
-            material = new THREE.MeshBasicMaterial({
-              color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-              transparent: true,
-              opacity: 0.8
-            });
-          }
+          // CRITICAL: Use MeshBasicMaterial instead of MeshStandardMaterial/MeshPhongMaterial
+          // MeshBasicMaterial doesn't use shaders for lighting, eliminating uniform location errors
+          const material = new THREE.MeshBasicMaterial({
+            color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+            transparent: true,
+            opacity: 0.8,
+            // No lighting properties to cause shader errors
+          });
           
           // Create mesh
           const node = new THREE.Mesh(geometry, material);
           
+          // Add metadata
+          node.userData = {
+            id: i,
+            type: isVulnerable ? 'vulnerable' : 'secure',
+            connections: [],
+            compromised: false,
+            originalColor: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+            highlighted: false
+          };
+          
           // Position in 3D space - cluster formation
           const angle = Math.random() * Math.PI * 2;
           const radius = 2 + Math.random() * 3;
-          const height = (Math.random() - 0.5) * 4;
-          
+          const height = (Math.random() - 0.5) * 2;
           node.position.x = Math.cos(angle) * radius;
           node.position.y = height;
           node.position.z = Math.sin(angle) * radius;
           
-          // Add metadata
-          node.userData = {
-            id: i,
-            type: isVulnerable ? 'vulnerable' : 'safe',
-            connections: 0,
-            pulseOffset: Math.random() * Math.PI * 2,
-            exploited: false,
-            importance: Math.random()
-          };
-          
           this.nodes.push(node);
           this.scene.add(node);
         } catch (e) {
-          console.warn(`Failed to create node ${i}:`, e);
+          console.warn(`[GHOST PROTOCOL] Error creating node ${i}:`, e);
+          // Continue with remaining nodes
         }
       }
-    } catch (e) {
-      console.error('Failed to generate network:', e);
-    }
-    
-    // Create connections between nodes
-    for (let i = 0; i < this.nodes.length; i++) {
-      const sourceNode = this.nodes[i];
       
-      // Find nearest nodes to connect with
-      const nearestNodes = this.findNearestNodes(sourceNode, this.options.connectionLimit);
-      
-      nearestNodes.forEach(targetIndex => {
-        const targetNode = this.nodes[targetIndex];
-        
-        // Skip if connection already exists
-        if (this.connectionExists(sourceNode.userData.id, targetNode.userData.id)) {
-          return;
+      // Connect nodes with error handling for each connection
+      for (let i = 0; i < this.nodes.length; i++) {
+        try {
+          const sourceNode = this.nodes[i];
+          if (!sourceNode) continue;
+          
+          // Calculate number of connections for this node
+          const connectionCount = Math.min(Math.floor(Math.random() * 3) + 1, 2); // Max 2 connections per node
+          
+          // Connect to several other nodes
+          for (let j = 0; j < connectionCount; j++) {
+            try {
+              // Find a random target node that isn't the source node
+              let targetNodeIndex;
+              let attempts = 0;
+              do {
+                targetNodeIndex = Math.floor(Math.random() * this.nodes.length);
+                attempts++;
+                if (attempts > 10) break; // Prevent infinite loop
+              } while (targetNodeIndex === i || !this.nodes[targetNodeIndex]);
+              
+              // Skip if we couldn't find a valid target
+              if (attempts > 10 || !this.nodes[targetNodeIndex]) continue;
+              
+              const targetNode = this.nodes[targetNodeIndex];
+              
+              // Create a connection line with the simplest possible material
+              const connectionMaterial = new THREE.LineBasicMaterial({
+                color: this.options.colors.connection,
+                transparent: true,
+                opacity: 0.5
+              });
+              
+              // Create points for the line
+              const points = [
+                sourceNode.position.clone(), // Clone to avoid reference issues
+                targetNode.position.clone()
+              ];
+              
+              // Create geometry from points
+              const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+              
+              // Create the line
+              const connectionLine = new THREE.Line(lineGeometry, connectionMaterial);
+              
+              // Add metadata to the line
+              connectionLine.userData = {
+                sourceId: i,
+                targetId: targetNodeIndex,
+                active: false,
+                compromised: false
+              };
+              
+              // Store references (safely)
+              this.connections.push(connectionLine);
+              
+              // Safely add connection references
+              if (sourceNode.userData && Array.isArray(sourceNode.userData.connections)) {
+                sourceNode.userData.connections.push(connectionLine);
+              }
+              
+              if (targetNode.userData && Array.isArray(targetNode.userData.connections)) {
+                targetNode.userData.connections.push(connectionLine);
+              }
+              
+              // Add to scene
+              this.scene.add(connectionLine);
+            } catch (e) {
+              console.warn(`[GHOST PROTOCOL] Error creating connection from node ${i}:`, e);
+              // Continue with next connection
+            }
+          }
+        } catch (e) {
+          console.warn(`[GHOST PROTOCOL] Error processing connections for node ${i}:`, e);
+          // Continue with next node
         }
-        
-        // Connection color based on vulnerability
-        const isVulnerablePath = 
-          sourceNode.userData.type === 'vulnerable' || 
-          targetNode.userData.type === 'vulnerable';
-        
-        // Create line material
-        const material = new THREE.LineBasicMaterial({
-          color: isVulnerablePath ? this.options.colors.vulnerable : this.options.colors.safe,
-          transparent: true,
-          opacity: isVulnerablePath ? 0.4 : 0.2,
-          linewidth: isVulnerablePath ? 2 : 1
-        });
-        
         // Create line geometry
         const points = [
           sourceNode.position,
