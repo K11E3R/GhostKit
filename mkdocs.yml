@@ -1,5 +1,6 @@
 site_name: GhostKit | Advanced Offensive Security Framework
-site_dir: docs
+site_dir: site
+docs_dir: mkdocs-src
 site_description: Comprehensive documentation for the GhostKit offensive security toolkit
 site_author: GhostKit Red Team
 site_url: https://k11e3r.github.io/GhostKit/
@@ -53,6 +54,9 @@ plugins:
       enable_creation_date: true
       fallback_to_build_date: true
       enabled: !ENV [CI, false]  # Disable in CI environments
+  - mkdocs-simple-hooks:
+      hooks:
+        post-build: 'scripts.hooks:copy_to_docs'
   - git-committers:
       repository: K11E3R/GhostKit
       branch: master
