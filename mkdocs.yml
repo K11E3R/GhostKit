@@ -54,9 +54,8 @@ plugins:
       enable_creation_date: true
       fallback_to_build_date: true
       enabled: !ENV [CI, false]  # Disable in CI environments
-  - mkdocs-simple-hooks:
-      hooks:
-        on_post_build: 'scripts.hooks:copy_to_docs'
+      
+  # Note: GitHub Pages deployment is handled directly in CI workflow
   - git-committers:
       repository: K11E3R/GhostKit
       branch: master
