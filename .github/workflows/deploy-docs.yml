@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs-material
+          pip install "mkdocs-material[imaging]"  # This includes cairosvg for social cards
           pip install -r requirements.txt
           pip install mkdocs-git-revision-date-localized-plugin
           pip install mkdocs-git-committers-plugin-2
@@ -50,6 +50,8 @@ jobs:
 
       - name: Build
         run: mkdocs build
+        # Don't use strict mode in CI to avoid blocking deployment
+        # Use --strict locally for development only
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
