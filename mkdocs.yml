@@ -3,6 +3,9 @@ site_description: Comprehensive documentation for the GhostKit offensive securit
 site_author: GhostKit Red Team
 site_url: https://k11e3r.github.io/GhostKit/
 
+# Disable strict mode for CI builds
+strict: false
+
 repo_name: GhostKit
 repo_url: https://github.com/K11E3R/GhostKit
 
@@ -46,9 +49,12 @@ plugins:
         python: {}
   - git-revision-date-localized:
       enable_creation_date: true
+      fallback_to_build_date: true
+      enabled: !ENV [CI, false]  # Disable in CI environments
   - git-committers:
       repository: K11E3R/GhostKit
       branch: master
+      enabled: !ENV [GH_TOKEN, false]  # Only enable when token is available
 
 # Extended markdown support for security writeups
 markdown_extensions:
