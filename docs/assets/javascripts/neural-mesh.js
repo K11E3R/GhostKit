@@ -199,21 +199,27 @@ class NeuralMesh {
   
   generateNetwork() {
     try {
-      // Create node objects with error handling
+      console.log('[GHOST PROTOCOL] Generating secure network graph with ultra-safe materials');
+      
+      // Create node objects with simplified materials to reduce shader errors
       for (let i = 0; i < this.options.nodeCount; i++) {
         try {
-          // Node geometry based on type
+          // Node type
           const isVulnerable = Math.random() < 0.2;
-          let geometry;
           
-          try {
+          // Use simpler geometry with fewer segments to reduce shader complexity
+          const geometry = new THREE.SphereGeometry(
+            isVulnerable ? 0.08 : 0.05, 
+            8, // Reduced from 16 to minimize shader complexity
+            8  // Reduced from 16 to minimize shader complexity
+          );
           
           // CRITICAL: Use MeshBasicMaterial instead of MeshStandardMaterial/MeshPhongMaterial
           // MeshBasicMaterial doesn't use shaders for lighting, eliminating uniform location errors
           const material = new THREE.MeshBasicMaterial({
             color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
             transparent: true,
-            opacity: 0.8,
+            opacity: 0.8
             // No lighting properties to cause shader errors
           });
           
@@ -274,7 +280,7 @@ class NeuralMesh {
               
               // Create a connection line with the simplest possible material
               const connectionMaterial = new THREE.LineBasicMaterial({
-                color: this.options.colors.connection,
+                color: this.options.colors.connection || 0x888888, // Fallback color if not defined
                 transparent: true,
                 opacity: 0.5
               });
@@ -289,10 +295,10 @@ class NeuralMesh {
               const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
               
               // Create the line
-              const connectionLine = new THREE.Line(lineGeometry, connectionMaterial);
+              const connection = new THREE.Line(lineGeometry, connectionMaterial);
               
               // Add metadata to the line
-              connectionLine.userData = {
+              connection.userData = {
                 sourceId: i,
                 targetId: targetNodeIndex,
                 active: false,
@@ -300,19 +306,19 @@ class NeuralMesh {
               };
               
               // Store references (safely)
-              this.connections.push(connectionLine);
+              this.connections.push(connection);
               
               // Safely add connection references
               if (sourceNode.userData && Array.isArray(sourceNode.userData.connections)) {
-                sourceNode.userData.connections.push(connectionLine);
+                sourceNode.userData.connections.push(connection);
               }
               
               if (targetNode.userData && Array.isArray(targetNode.userData.connections)) {
-                targetNode.userData.connections.push(connectionLine);
+                targetNode.userData.connections.push(connection);
               }
               
               // Add to scene
-              this.scene.add(connectionLine);
+              this.scene.add(connection);
             } catch (e) {
               console.warn(`[GHOST PROTOCOL] Error creating connection from node ${i}:`, e);
               // Continue with next connection
@@ -322,58 +328,37 @@ class NeuralMesh {
           console.warn(`[GHOST PROTOCOL] Error processing connections for node ${i}:`, e);
           // Continue with next node
         }
-        // Create line geometry
-        const points = [
-          sourceNode.position,
-          targetNode.position
-        ];
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-        
-        // Create line and add to scene
-        const connection = new THREE.Line(geometry, material);
-        
-        // Add metadata
-        connection.userData = {
-          source: sourceNode.userData.id,
-          target: targetNode.userData.id,
-          vulnerable: isVulnerablePath,
-          active: false,
-          trafficIntensity: 0
-        };
-        
-        this.connections.push(connection);
-        this.scene.add(connection);
-        
-        // Update node connection count
-        sourceNode.userData.connections++;
-        targetNode.userData.connections++;
-      });
+      }
+      
+      console.log(`[GHOST PROTOCOL] Network generation complete: ${this.nodes.length} nodes, ${this.connections.length} connections`);
     }
     
     // Add special "core" node
-    const coreGeometry = new THREE.OctahedronGeometry(0.2, 1);
-    const coreMaterial = new THREE.MeshPhongMaterial({
-      color: this.options.colors.safe,
-      emissive: this.options.colors.safe,
-      emissiveIntensity: 0.5,
-      transparent: true,
-      opacity: 0.9,
-      shininess: 80
-    });
-    
-    this.coreNode = new THREE.Mesh(coreGeometry, coreMaterial);
-    this.coreNode.position.set(0, 0, 0);
-    this.coreNode.userData = {
-      id: this.nodes.length,
-      type: 'core',
-      connections: 0,
-      pulseOffset: 0,
-      exploited: false,
-      importance: 1.0
-    };
-    
-    this.nodes.push(this.coreNode);
-    this.scene.add(this.coreNode);
+    try {
+      // Create core node with simplified geometry and basic material for shader safety
+      const coreGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+      const coreMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.9
+      });
+      
+      this.coreNode = new THREE.Mesh(coreGeometry, coreMaterial);
+      this.coreNode.position.set(0, 0, 0);
+      this.coreNode.userData = {
+        id: 'core',
+        type: 'core',
+        connections: [],
+        exploited: false
+      };
+      
+      this.scene.add(this.coreNode);
+      this.nodes.push(this.coreNode);
+      
+      console.log('[GHOST PROTOCOL] Core node created successfully');
+    } catch (e) {
+      console.warn('[GHOST PROTOCOL] Error creating core node:', e);
+    }
     
     // Connect vulnerable nodes to core
     this.nodes.forEach(node => {
