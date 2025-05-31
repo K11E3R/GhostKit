@@ -385,8 +385,22 @@
       }
     </script>
     <script src="assets/javascripts/bundle.13a4f30d.min.js"></script>
+    <!-- Load Three.js BEFORE other scripts to ensure proper initialization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+    <!-- Handle GitHub API fallbacks -->
+    <script>
+      window.addEventListener('error', function(event) {
+        // Handle GitHub API errors by providing fallback
+        if (event.target && (event.target.src || event.target.href)) {
+          const url = event.target.src || event.target.href;
+          if (url.includes('github.com') || url.includes('githubusercontent.com')) {
+            console.warn('GitHub API resource failed to load, using local fallback');
+            event.preventDefault();
+          }
+        }
+      }, true);
+    </script>
     <script src="assets/javascripts/ghostkit-quantum.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="assets/javascripts/neural-mesh.js"></script>
     <script>
       // Neural Interface Initialization

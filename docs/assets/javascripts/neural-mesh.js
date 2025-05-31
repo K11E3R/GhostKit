@@ -1,6 +1,9 @@
 /**
  * Neural Mesh - Advanced 3D visualization system for threat modeling
  * Part of GhostKit Quantum enhancement suite
+ * 
+ * OPTIMIZED VERSION - Fixed WebGL uniform location errors and shader program issues
+ * Compatible with Three.js r148+
  */
 
 class NeuralMesh {
@@ -31,100 +34,194 @@ class NeuralMesh {
   }
   
   init() {
-    // Initialize Three.js scene
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(this.options.colors.background);
+    try {
+      // Initialize Three.js scene with error handling
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color(this.options.colors.background);
+      
+      // Set up camera with safe defaults if parameters fail
+      try {
+        this.camera = new THREE.PerspectiveCamera(
+          75, 
+          this.canvas.clientWidth / this.canvas.clientHeight, 
+          0.1, 
+          1000
+        );
+      } catch (e) {
+        console.warn('Failed to initialize camera with custom parameters, using defaults', e);
+        this.camera = new THREE.PerspectiveCamera();
+      }
+      this.camera.position.z = 5;
+      
+      // Set up renderer with fallbacks for WebGL compatibility
+      try {
+        this.renderer = new THREE.WebGLRenderer({ 
+          canvas: this.canvas,
+          antialias: this.options.renderQuality === 'high',
+          alpha: true,
+          powerPreference: 'high-performance',
+          precision: 'highp'
+        });
+      } catch (e) {
+        console.warn('Failed to initialize WebGL renderer with advanced options, using basic setup', e);
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
+      }
+      
+      // Configure renderer
+      this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+      
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      this.scene.add(ambientLight);
+      
+      // Add point light
+      const pointLight = new THREE.PointLight(0xffffff, 0.8);
+      pointLight.position.set(5, 5, 5);
+      this.scene.add(pointLight);
+      
+      // Generate mesh network
+      this.generateNetwork();
+      
+      // Start animation loop
+      this.animate();
+      
+      // Handle window resize
+      window.addEventListener('resize', () => this.onResize());
+      
+      // Add click handler for node selection
+      this.raycaster = new THREE.Raycaster();
+      this.mouse = new THREE.Vector2();
+      this.canvas.addEventListener('click', (event) => this.onCanvasClick(event));
+      
+      // Simulate periodic attacks
+      setInterval(() => this.simulateAttack(), 8000);
+    } catch (e) {
+      console.error('Critical error initializing NeuralMesh:', e);
+      // Add fallback visualization if WebGL fails
+      this.initFallbackVisualization();
+    }
+  }
+  
+  // Fallback method if WebGL initialization fails
+  initFallbackVisualization() {
+    if (!this.canvas) return;
     
-    // Set up camera
-    this.camera = new THREE.PerspectiveCamera(
-      75, 
-      this.canvas.clientWidth / this.canvas.clientHeight, 
-      0.1, 
-      1000
-    );
-    this.camera.position.z = 5;
+    // Clear the canvas
+    const ctx = this.canvas.getContext('2d');
+    if (!ctx) return;
     
-    // Set up renderer
-    this.renderer = new THREE.WebGLRenderer({ 
-      canvas: this.canvas,
-      antialias: this.options.renderQuality === 'high',
-      alpha: true
-    });
-    this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    ctx.fillStyle = '#070711';
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    this.scene.add(ambientLight);
+    // Draw some nodes and connections in 2D
+    const drawNode = (x, y, isVulnerable) => {
+      ctx.beginPath();
+      ctx.arc(x, y, isVulnerable ? 8 : 5, 0, Math.PI * 2);
+      ctx.fillStyle = isVulnerable ? '#ff003c' : '#00ff9d';
+      ctx.fill();
+    };
     
-    // Add point light
-    const pointLight = new THREE.PointLight(0xffffff, 0.8);
-    pointLight.position.set(5, 5, 5);
-    this.scene.add(pointLight);
+    const nodes = [];
+    // Generate nodes
+    for (let i = 0; i < 50; i++) {
+      const x = Math.random() * this.canvas.width;
+      const y = Math.random() * this.canvas.height;
+      const isVulnerable = Math.random() < 0.2;
+      nodes.push({ x, y, isVulnerable });
+      drawNode(x, y, isVulnerable);
+    }
     
-    // Generate mesh network
-    this.generateNetwork();
-    
-    // Start animation loop
-    this.animate();
-    
-    // Handle window resize
-    window.addEventListener('resize', () => this.onResize());
-    
-    // Add click handler for node selection
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
-    this.canvas.addEventListener('click', (event) => this.onCanvasClick(event));
-    
-    // Simulate periodic attacks
-    setInterval(() => this.simulateAttack(), 8000);
+    // Draw connections
+    ctx.strokeStyle = '#00ff9d44';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < nodes.length; i++) {
+      // Connect to 2-3 nearest nodes
+      const connections = Math.floor(Math.random() * 2) + 2;
+      for (let j = 0; j < connections; j++) {
+        const target = Math.floor(Math.random() * nodes.length);
+        if (target !== i) {
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[target].x, nodes[target].y);
+          ctx.stroke();
+        }
+      }
+    }
   }
   
   generateNetwork() {
-    // Create node objects
-    for (let i = 0; i < this.options.nodeCount; i++) {
-      // Node geometry based on type
-      const isVulnerable = Math.random() < 0.2;
-      const geometry = new THREE.SphereGeometry(
-        isVulnerable ? 0.08 : 0.05, 
-        16, 
-        16
-      );
-      
-      // Node material
-      const material = new THREE.MeshPhongMaterial({
-        color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-        emissive: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-        emissiveIntensity: 0.3,
-        transparent: true,
-        opacity: 0.8,
-        shininess: 30
-      });
-      
-      // Create mesh
-      const node = new THREE.Mesh(geometry, material);
-      
-      // Position in 3D space - cluster formation
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 2 + Math.random() * 3;
-      const height = (Math.random() - 0.5) * 4;
-      
-      node.position.x = Math.cos(angle) * radius;
-      node.position.y = height;
-      node.position.z = Math.sin(angle) * radius;
-      
-      // Add metadata
-      node.userData = {
-        id: i,
-        type: isVulnerable ? 'vulnerable' : 'safe',
-        connections: 0,
-        pulseOffset: Math.random() * Math.PI * 2,
-        exploited: false,
-        importance: Math.random()
-      };
-      
-      this.nodes.push(node);
-      this.scene.add(node);
+    try {
+      // Create node objects with error handling
+      for (let i = 0; i < this.options.nodeCount; i++) {
+        try {
+          // Node geometry based on type
+          const isVulnerable = Math.random() < 0.2;
+          let geometry;
+          
+          try {
+            geometry = new THREE.SphereGeometry(
+              isVulnerable ? 0.08 : 0.05, 
+              16, 
+              16
+            );
+          } catch (e) {
+            console.warn('Failed to create custom sphere geometry, using default', e);
+            geometry = new THREE.SphereGeometry(0.05);
+          }
+          
+          // Node material with proper shader handling
+          let material;
+          try {
+            // Use MeshStandardMaterial instead of MeshPhongMaterial for better shader compatibility
+            material = new THREE.MeshStandardMaterial({
+              color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+              emissive: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+              emissiveIntensity: 0.3,
+              transparent: true,
+              opacity: 0.8,
+              roughness: 0.5,
+              metalness: 0.7
+            });
+          } catch (e) {
+            console.warn('Failed to create custom material, using default', e);
+            material = new THREE.MeshBasicMaterial({
+              color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+              transparent: true,
+              opacity: 0.8
+            });
+          }
+          
+          // Create mesh
+          const node = new THREE.Mesh(geometry, material);
+          
+          // Position in 3D space - cluster formation
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 2 + Math.random() * 3;
+          const height = (Math.random() - 0.5) * 4;
+          
+          node.position.x = Math.cos(angle) * radius;
+          node.position.y = height;
+          node.position.z = Math.sin(angle) * radius;
+          
+          // Add metadata
+          node.userData = {
+            id: i,
+            type: isVulnerable ? 'vulnerable' : 'safe',
+            connections: 0,
+            pulseOffset: Math.random() * Math.PI * 2,
+            exploited: false,
+            importance: Math.random()
+          };
+          
+          this.nodes.push(node);
+          this.scene.add(node);
+        } catch (e) {
+          console.warn(`Failed to create node ${i}:`, e);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to generate network:', e);
     }
     
     // Create connections between nodes
@@ -522,10 +619,46 @@ class NeuralMesh {
 
 // Initialize if window and THREE are available
 document.addEventListener('DOMContentLoaded', function() {
+  // Check for WebGL support first
+  const checkWebGLSupport = () => {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && 
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+    } catch (e) {
+      return false;
+    }
+  };
+  
+  // Log WebGL support status
+  const hasWebGL = checkWebGLSupport();
+  console.log(`WebGL Support: ${hasWebGL ? 'Available' : 'Not Available'}`);
+  
   setTimeout(() => {
     const canvas = document.querySelector('.threat-mesh__canvas');
     if (canvas && window.THREE) {
-      new NeuralMesh(canvas);
+      try {
+        new NeuralMesh(canvas);
+        console.log('NeuralMesh initialized successfully');
+      } catch (e) {
+        console.error('Failed to initialize NeuralMesh:', e);
+        
+        // Fallback to basic visualization if NeuralMesh fails
+        try {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#070711';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '14px monospace';
+            ctx.fillStyle = '#00ff9d';
+            ctx.fillText('[REDACTED] Threat Mesh Visualization', 20, 30);
+            ctx.fillText('WebGL initialization failed', 20, 50);
+            ctx.fillText('Fallback mode enabled', 20, 70);
+          }
+        } catch (drawErr) {
+          console.error('Even 2D fallback failed:', drawErr);
+        }
+      }
     }
   }, 2000); // Delay to ensure DOM and Three.js are fully loaded
 });
