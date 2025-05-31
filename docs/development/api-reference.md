@@ -13,9 +13,12 @@ GhostKit provides a comprehensive REST API and Python SDK for automation, integr
 All API requests require authentication using API keys:
 
 ```bash
+# Replace API_KEY with your actual API key
+API_KEY="your-api-key-here"
+
 curl -X GET https://localhost:6781/api/v1/modules \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER"
+  -H "X-API-Key: $API_KEY"
 ```
 
 Generate an API key:
@@ -616,9 +619,12 @@ curl -X POST https://localhost:6781/api/v1/auth/login \
   -d '{"username": "admin", "password": "secure_password"}'
 
 # Run a port scan
+# Replace API_KEY with your actual API key
+API_KEY="your-api-key-here"
+
 curl -X POST https://localhost:6781/api/v1/tasks \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER" \
+  -H "X-API-Key: $API_KEY" \
   -d '{
     "module": "port_scanner",
     "parameters": {
@@ -629,8 +635,9 @@ curl -X POST https://localhost:6781/api/v1/tasks \
   }'
 
 # Get the results
+# Using the same API_KEY variable
 curl -X GET https://localhost:6781/api/v1/tasks/task_id/results \
-  -H "X-API-Key: YOUR_API_KEY_PLACEHOLDER"
+  -H "X-API-Key: $API_KEY"
 ```
 
 ### Python Requests
@@ -639,12 +646,15 @@ curl -X GET https://localhost:6781/api/v1/tasks/task_id/results \
 import requests
 import json
 
+# Configuration 
 API_URL = "https://localhost:6781/api/v1"
-API_KEY = "your_api_key_here"
+
+# Replace with your actual API key when using
+API_KEY = "your_api_key_here" 
 
 headers = {
     "Content-Type": "application/json",
-    "X-API-Key": "YOUR_API_KEY_PLACEHOLDER"
+    "X-API-Key": API_KEY  # Using variable reference instead of direct string
 }
 
 # Run a web vulnerability scan
@@ -695,12 +705,15 @@ with open("scan_results.pdf", "wb") as f:
 const axios = require('axios');
 const fs = require('fs');
 
+// Configuration
 const API_URL = 'https://localhost:6781/api/v1';
+
+// Replace with your actual API key when using
 const API_KEY = 'your_api_key_here';
 
 const headers = {
   'Content-Type': 'application/json',
-  'X-API-Key': 'YOUR_API_KEY_PLACEHOLDER'
+  'X-API-Key': API_KEY  // Using variable reference instead of direct string
 };
 
 // Run a network scan
