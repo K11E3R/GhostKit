@@ -16,12 +16,20 @@ class NeuralMesh {
         safe: 0x00ff9d,
         vulnerable: 0xff003c,
         exploited: 0xff9d00,
-        background: 0x070711
+        targeted: 0xffcc00,
+        background: 0x070711,
+        predictedPath: 0xff5e86,
+        criticalNode: 0xff00ff,
+        dataStream: 0x00c3ff
       },
       animationSpeed: 1.0,
       pulseIntensity: 0.3,
       autoRotate: true,
-      renderQuality: 'high'
+      renderQuality: 'high',
+      enableQuantumEntanglement: true,
+      enableRealityDistortion: true,
+      threatModelingEnabled: true,
+      adaptiveDefenseSystem: true
     }, options);
     
     this.nodes = [];
@@ -29,6 +37,26 @@ class NeuralMesh {
     this.attackPaths = [];
     this.exploitedNodes = new Set();
     this.breachInProgress = false;
+    this.predictedTargets = new Set();
+    this.entangledNodes = new Map(); // Quantum entanglement pairs
+    this.threatModel = {
+      attackVectors: [],
+      vulnerabilityScores: {},
+      criticalAssets: new Set(),
+      attackSurface: 0,
+      defenseCapability: 0
+    };
+    this.realityDistortionLevel = 0;
+    this.lastAnalysisTime = Date.now();
+    
+    // Performance metrics
+    this.metrics = {
+      framesPerSecond: 0,
+      nodeRenderTime: 0,
+      pathPredictionTime: 0,
+      totalRenderTime: 0,
+      anomalyDetectionRate: 0
+    };
     
     this.init();
   }
@@ -74,6 +102,12 @@ class NeuralMesh {
         // Add shader error protection if not already patched
         const originalRender = this.renderer.render;
         this.renderer.render = (scene, camera) => {
+          // Check for WebGL support to avoid shader uniform location errors
+          if (!this.isWebGLSupported()) {
+            console.log('[GHOST PROTOCOL] WebGL not supported in this context, using fallback');
+            this.initializeFallback2D();
+            return;
+          }
           try {
             return originalRender.call(this.renderer, scene, camera);
           } catch (e) {
@@ -196,7 +230,6 @@ class NeuralMesh {
       }
     }
   }
-  
   generateNetwork() {
     try {
       console.log('[GHOST PROTOCOL] Generating secure network graph with ultra-safe materials');
@@ -204,68 +237,48 @@ class NeuralMesh {
       // Create node objects with simplified materials to reduce shader errors
       for (let i = 0; i < this.options.nodeCount; i++) {
         try {
-          // Node type
-          const isVulnerable = Math.random() < 0.2;
-          
-          // Use simpler geometry with fewer segments to reduce shader complexity
-          const geometry = new THREE.SphereGeometry(
-            isVulnerable ? 0.08 : 0.05, 
-            8, // Reduced from 16 to minimize shader complexity
-            8  // Reduced from 16 to minimize shader complexity
-          );
-          
-          // CRITICAL: Use MeshBasicMaterial instead of MeshStandardMaterial/MeshPhongMaterial
-          // MeshBasicMaterial doesn't use shaders for lighting, eliminating uniform location errors
+          const geometry = new THREE.SphereGeometry(0.05, 16, 16);
           const material = new THREE.MeshBasicMaterial({
-            color: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
+            color: this.options.colors.safe,
             transparent: true,
-            opacity: 0.8
-            // No lighting properties to cause shader errors
+            opacity: 0.7
           });
           
-          // Create mesh
-          const node = new THREE.Mesh(geometry, material);
+          const mesh = new THREE.Mesh(geometry, material);
           
-          // Add metadata
-          node.userData = {
-            id: i,
-            type: isVulnerable ? 'vulnerable' : 'secure',
+          // Position nodes randomly in a sphere
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          const radius = 2 * Math.pow(Math.random(), 1/3);
+          
+          mesh.position.x = radius * Math.sin(phi) * Math.cos(theta);
+          mesh.position.y = radius * Math.sin(phi) * Math.sin(theta);
+          mesh.position.z = radius * Math.cos(phi);
+          
+          // Store node data
+          const node = {
+            id: `node-${i}`,
+            mesh: mesh,
             connections: [],
-            compromised: false,
-            originalColor: isVulnerable ? this.options.colors.vulnerable : this.options.colors.safe,
-            highlighted: false
+            security: Math.random(), // 0 = vulnerable, 1 = secure
+            value: Math.random(),    // 0 = low value, 1 = high value
+            exploited: false,
+            targeted: false,          // Is node predicted as a potential target
+            criticalAsset: Math.random() > 0.9, // 10% chance of being a critical asset
+            vulnerability: Math.random() > 0.7 ? Math.random() * 0.8 : 0, // 30% chance of having vulnerabilities
+            pulsePhase: Math.random() * Math.PI * 2,
+            distortionFactor: Math.random() * 0.2 // For reality distortion effect
           };
           
-          // Position in 3D space - cluster formation
-          const angle = Math.random() * Math.PI * 2;
-          const radius = 2 + Math.random() * 3;
-          const height = (Math.random() - 0.5) * 2;
-          node.position.x = Math.cos(angle) * radius;
-          node.position.y = height;
-          node.position.z = Math.sin(angle) * radius;
+          if (node.criticalAsset) {
+            this.threatModel.criticalAssets.add(node.id);
+          }
           
           this.nodes.push(node);
-          this.scene.add(node);
-        } catch (e) {
-          console.warn(`[GHOST PROTOCOL] Error creating node ${i}:`, e);
-          // Continue with remaining nodes
-        }
-      }
-      
-      // Connect nodes with error handling for each connection
-      for (let i = 0; i < this.nodes.length; i++) {
-        try {
-          const sourceNode = this.nodes[i];
-          if (!sourceNode) continue;
+          this.scene.add(mesh);
           
-          // Calculate number of connections for this node
-          const connectionCount = Math.min(Math.floor(Math.random() * 3) + 1, 2); // Max 2 connections per node
-          
-          // Connect to several other nodes
-          for (let j = 0; j < connectionCount; j++) {
-            try {
-              // Find a random target node that isn't the source node
-              let targetNodeIndex;
+          // Add a subtle glowing backdrop to show reality breach model
+          this.threatModel.vulnerabilityScores[node.id] = node.vulnerability;
               let attempts = 0;
               do {
                 targetNodeIndex = Math.floor(Math.random() * this.nodes.length);
@@ -287,8 +300,8 @@ class NeuralMesh {
               
               // Create points for the line
               const points = [
-                sourceNode.position.clone(), // Clone to avoid reference issues
-                targetNode.position.clone()
+                node.mesh.position.clone(), // Clone to avoid reference issues
+                targetNode.mesh.position.clone()
               ];
               
               // Create geometry from points
@@ -309,12 +322,12 @@ class NeuralMesh {
               this.connections.push(connection);
               
               // Safely add connection references
-              if (sourceNode.userData && Array.isArray(sourceNode.userData.connections)) {
-                sourceNode.userData.connections.push(connection);
+              if (node.connections && Array.isArray(node.connections)) {
+                node.connections.push(connection);
               }
               
-              if (targetNode.userData && Array.isArray(targetNode.userData.connections)) {
-                targetNode.userData.connections.push(connection);
+              if (targetNode.connections && Array.isArray(targetNode.connections)) {
+                targetNode.connections.push(connection);
               }
               
               // Add to scene
@@ -331,29 +344,39 @@ class NeuralMesh {
       }
       
       console.log(`[GHOST PROTOCOL] Network generation complete: ${this.nodes.length} nodes, ${this.connections.length} connections`);
+    } catch (e) {
+      console.error('[GHOST PROTOCOL] Critical error generating network:', e);
     }
     
     // Add special "core" node
     try {
-      // Create core node with simplified geometry and basic material for shader safety
-      const coreGeometry = new THREE.SphereGeometry(0.15, 16, 16);
-      const coreMaterial = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.9
-      });
-      
-      this.coreNode = new THREE.Mesh(coreGeometry, coreMaterial);
-      this.coreNode.position.set(0, 0, 0);
-      this.coreNode.userData = {
-        id: 'core',
-        type: 'core',
-        connections: [],
-        exploited: false
-      };
-      
-      this.scene.add(this.coreNode);
-      this.nodes.push(this.coreNode);
+      // Create core node at center
+      try {
+        const coreMaterial = new THREE.MeshBasicMaterial({
+          color: this.options.colors.safe,
+          transparent: true,
+          opacity: 0.9
+        });
+        
+        const coreGeometry = new THREE.SphereGeometry(0.15, 12, 12);
+        this.coreNode = new THREE.Mesh(coreGeometry, coreMaterial);
+        this.coreNode.position.set(0, 0, 0);
+        
+        // Set core node properties
+        this.coreNode.userData = {
+          id: 'core',
+          connections: 0,
+          isVulnerable: false,
+          isExploited: false,
+          isCore: true,
+          pulsePhase: 0
+        };
+        
+        this.scene.add(this.coreNode);
+        this.nodes.push(this.coreNode);
+      } catch (coreError) {
+        console.warn('[GHOST PROTOCOL] Error creating core node:', coreError);
+      }
       
       console.log('[GHOST PROTOCOL] Core node created successfully');
     } catch (e) {
@@ -373,7 +396,7 @@ class NeuralMesh {
         
         // Create line geometry
         const points = [
-          node.position,
+          node.mesh.position,
           this.coreNode.position
         ];
         const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -401,30 +424,47 @@ class NeuralMesh {
   }
   
   findNearestNodes(sourceNode, count) {
-    const distances = [];
-    
-    for (let i = 0; i < this.nodes.length; i++) {
-      const targetNode = this.nodes[i];
+    try {
+      const distances = [];
       
-      // Skip if same node
-      if (targetNode === sourceNode) {
-        continue;
+      for (let i = 0; i < this.nodes.length; i++) {
+        try {
+          const targetNode = this.nodes[i];
+          
+          // Skip if same node
+          if (targetNode === sourceNode) {
+            continue;
+          }
+          
+          // Calculate distance with safe error handling
+          try {
+            const distance = sourceNode.mesh.position.distanceTo(targetNode.mesh.position);
+            
+            distances.push({
+              index: i,
+              distance: distance
+            });
+          } catch (distanceError) {
+            console.warn('[GHOST PROTOCOL] Error calculating distance:', distanceError);
+          }
+        } catch (nodeError) {
+          console.warn('[GHOST PROTOCOL] Error processing node in findNearestNodes:', nodeError);
+        }
       }
       
-      // Calculate distance
-      const distance = sourceNode.position.distanceTo(targetNode.position);
+      // Sort by distance with error handling
+      try {
+        distances.sort((a, b) => a.distance - b.distance);
+      } catch (sortError) {
+        console.warn('[GHOST PROTOCOL] Error sorting distances:', sortError);
+      }
       
-      distances.push({
-        index: i,
-        distance: distance
-      });
+      // Return indices of nearest nodes (limited by count)
+      return distances.slice(0, count).map(d => d.index);
+    } catch (error) {
+      console.error('[GHOST PROTOCOL] Critical error in findNearestNodes:', error);
+      return []; // Return empty array as fallback
     }
-    
-    // Sort by distance
-    distances.sort((a, b) => a.distance - b.distance);
-    
-    // Return indices of nearest nodes (limited by count)
-    return distances.slice(0, count).map(d => d.index);
   }
   
   connectionExists(sourceId, targetId) {
@@ -449,7 +489,7 @@ class NeuralMesh {
     // Animate nodes
     this.nodes.forEach(node => {
       // Pulse effect
-      const pulse = Math.sin(time + node.userData.pulseOffset) * this.options.pulseIntensity;
+      const pulse = Math.sin(time + node.userData.pulsePhase) * this.options.pulseIntensity;
       const basePulse = 1 + pulse * 0.2;
       
       // Different animation for different node types
@@ -670,6 +710,16 @@ class NeuralMesh {
       this.startAttack(startNode);
     }
   }
+  
+  isWebGLSupported() {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && 
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 // Initialize if window and THREE are available
@@ -738,7 +788,7 @@ class NeuralMesh {
         clearTimeout(forceCompletionTimer);
         console.log(`[GHOST PROTOCOL] NeuralMesh initialized in ${(performance.now() - startTime).toFixed(0)}ms`);
       } catch (e) {
-        console.error('[GHOST PROTOCOL] Failed to initialize NeuralMesh:', e);
+        console.log(`[GHOST PROTOCOL] Failed to initialize WebGL context: ${e}`);
         
         // Fallback to basic visualization
         try {

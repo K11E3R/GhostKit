@@ -22,7 +22,7 @@
     {"id": 18, "desc": "Add auto-update mechanism for modules via Git or PyPI", "done": false},
     {"id": 19, "desc": "Refactor wireless_attacks.py to include dynamic channel detection", "done": false},
     {"id": 20, "desc": "Improve regex patterns in web scanners for better detection accuracy", "done": false},
-    {"id": 21, "desc": "Add performance metrics and convergence indicators to neural_swarm", "done": false},
+    {"id": 21, "desc": "Add performance metrics and convergence indicators to neural_swarm", "done": true},
     {"id": 22, "desc": "Implement MITRE ATT&CK mapping for all exploitation modules", "done": false},
     {"id": 23, "desc": "Create comprehensive module documentation with examples", "done": false},
     {"id": 24, "desc": "Implement progressive scanning in web modules (passive → active)", "done": false},

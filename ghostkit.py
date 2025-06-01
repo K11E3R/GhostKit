@@ -70,9 +70,13 @@ class GhostKit:
                 module_name = filename[:-3]
                 try:
                     module = importlib.import_module(f"modules.{module_name}")
+                    print(f"\nload module ({module_name})")
                     if hasattr(module, "Module"):
+                        print(f"module ({module_name}) has attribute Module")
                         module_instance = module.Module()
+                        print(f"module instance ({module_name}) created")
                         self.modules[module_name] = module_instance
+                        print(f"module ({module_name}) added to modules\n")
                         logger.info(f"Loaded module: {module_name}")
 
                         # Special handling for xss_scanner test compatibility
@@ -82,6 +86,7 @@ class GhostKit:
                                 f"Registered module alias: xss_scanner -> web_xss_scanner"
                             )
                 except Exception as e:
+                    print("___________ RAISED ERROR ___________")
                     logger.error(f"Failed to load module {module_name}: {str(e)}")
 
         return len(self.modules)

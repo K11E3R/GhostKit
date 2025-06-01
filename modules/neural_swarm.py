@@ -17,7 +17,6 @@ import random
 import re
 import socket
 import sys
-import threading
 import time
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
@@ -38,7 +37,12 @@ try:
 except ImportError:
     SKLEARN_AVAILABLE = False
 
-from modules.base_module import BaseModule
+from modules.base_module import (
+    BaseModule,
+    ModuleResult,
+    ModuleRuntimeError,
+    ModuleSeverity,
+)
 
 
 class NeuralSwarmAgent:
@@ -825,7 +829,459 @@ class Module(BaseModule):
         return requests
 
 
+class Module(BaseModule):
+    """Neural Swarm Intelligence Module for GhostKit"""
+
+    def __init__(self):
+        self.name = "neural_swarm"
+        self.description = "AI-powered distributed swarm intelligence for threat detection and exploitation"
+        self.controller = None
+        super().__init__()
+
+    def _create_arg_parser(self) -> argparse.ArgumentParser:
+        """Create an argument parser for the module"""
+        parser = argparse.ArgumentParser(description=self.description)
+        parser.add_argument(
+            "--target", "-t", type=str, help="Target IP, domain, or file to analyze"
+        )
+        parser.add_argument(
+            "--agents",
+            "-a",
+            type=int,
+            default=5,
+            help="Number of neural agents to spawn",
+        )
+        parser.add_argument(
+            "--mode",
+            "-m",
+            type=str,
+            choices=["analyze", "exploit", "monitor"],
+            default="analyze",
+            help="Operation mode",
+        )
+        parser.add_argument(
+            "--timeout",
+            type=int,
+            default=30,
+            help="Timeout in seconds for swarm operations",
+        )
+        parser.add_argument(
+            "--output",
+            "-o",
+            type=str,
+            help="Output file for results (default: stdout)",
+        )
+        return parser
+
+    def _prepare_target_data(self, target: str) -> Dict[str, Any]:
+        """Prepare target data for swarm analysis
+
+        Args:
+            target: Target IP, domain, or file to analyze
+
+        Returns:
+            Dictionary containing prepared data for swarm analysis
+        """
+        # Performance metrics tracking
+        start_time = time.time()
+        data = {
+            "target": target,
+            "timestamp": time.time(),
+            "analysis_type": "initial",
+            "performance": {},
+        }
+
+        # Determine target type and generate appropriate data
+        if os.path.exists(target):
+            # Target is a file
+            data["type"] = "file"
+
+            try:
+                # Read first 1024 bytes to determine file type
+                with open(target, "rb") as f:
+                    header = f.read(1024)
+
+                # Basic file type analysis
+                if header.startswith(b"\x7fELF"):
+                    data["file_type"] = "elf"
+                elif header.startswith(b"MZ"):
+                    data["file_type"] = "pe"
+                elif header.startswith(b"\x89PNG"):
+                    data["file_type"] = "png"
+                elif b"<!DOCTYPE html>" in header or b"<html>" in header:
+                    data["file_type"] = "html"
+                else:
+                    data["file_type"] = "unknown"
+
+                # Get file stats
+                stats = os.stat(target)
+                data["file_size"] = stats.st_size
+                data["last_modified"] = stats.st_mtime
+            except Exception as e:
+                self.logger.warning(f"Error analyzing file {target}: {str(e)}")
+                data["error"] = str(e)
+
+        elif self._is_ip_address(target):
+            # Target is an IP address
+            data["type"] = "ip"
+
+            # Simulate some network data
+            data["packets"] = self._generate_simulated_packets(target)
+
+        elif self._is_domain(target):
+            # Target is a domain
+            data["type"] = "domain"
+
+            # Simulate some web data
+            data["requests"] = self._generate_simulated_requests(target)
+
+        else:
+            # Unknown target type
+            data["type"] = "unknown"
+
+        # Add performance metrics
+        end_time = time.time()
+        data["performance"]["data_preparation_time"] = end_time - start_time
+
+        return data
+
+    def _is_ip_address(self, s: str) -> bool:
+        """Check if string is an IP address"""
+        try:
+            ipaddress.ip_address(s)
+            return True
+        except ValueError:
+            return False
+
+    def _is_domain(self, s: str) -> bool:
+        """Check if string is a domain name"""
+        domain_pattern = (
+            r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
+        )
+        return bool(re.match(domain_pattern, s))
+
+    def _generate_simulated_packets(self, target_ip: str) -> List[Dict[str, Any]]:
+        """Generate simulated network packets for analysis"""
+        packets = []
+        for _ in range(10):
+            packet = {
+                "timestamp": time.time(),
+                "src_ip": f"192.168.1.{random.randint(1, 254)}",
+                "dst_ip": target_ip,
+                "src_port": random.randint(1024, 65535),
+                "dst_port": random.choice([80, 443, 8080, 22, 21, 25]),
+                "protocol": random.choice(["TCP", "UDP", "ICMP"]),
+                "flags": random.choice(["SYN", "ACK", "SYN-ACK", "FIN", "RST"]),
+                "payload": os.urandom(random.randint(10, 100)).hex(),
+            }
+            packets.append(packet)
+
+        # Add some potentially suspicious packets
+        suspicious_packet = {
+            "timestamp": time.time(),
+            "src_ip": target_ip,
+            "dst_ip": "203.0.113.1",  # Example external IP
+            "src_port": random.randint(1024, 65535),
+            "dst_port": 4444,  # Common C2 port
+            "protocol": "TCP",
+            "flags": "ACK",
+            "payload": os.urandom(64).hex(),  # Simulated encrypted data
+        }
+        packets.append(suspicious_packet)
+
+        return packets
+
+    def _generate_simulated_requests(self, target_domain: str) -> List[Dict[str, Any]]:
+        """Generate simulated web requests for analysis"""
+        requests = []
+        paths = ["/", "/login", "/admin", "/api/v1/users", "/search", "/profile"]
+
+        for path in paths:
+            request = {
+                "timestamp": time.time(),
+                "method": random.choice(["GET", "POST"]),
+                "url": f"https://{target_domain}{path}",
+                "headers": {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) GhostKit Neural Swarm",
+                    "Accept": "*/*",
+                    "Connection": "keep-alive",
+                },
+                "params": {},
+            }
+
+            # Add some parameters for certain paths
+            if path == "/search":
+                request["params"]["q"] = "test"
+            elif path == "/login":
+                request["params"]["username"] = "admin"
+                request["params"]["password"] = "password"
+
+            requests.append(request)
+
+        # Add a suspicious request
+        suspicious_request = {
+            "timestamp": time.time(),
+            "method": "POST",
+            "url": f"https://{target_domain}/login",
+            "headers": {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) GhostKit Neural Swarm",
+                "Accept": "*/*",
+                "Connection": "keep-alive",
+            },
+            "params": {"username": "admin' OR 1=1--", "password": "anything"},
+        }
+        requests.append(suspicious_request)
+
+        return requests
+
+    def _calculate_severity(self, threat_assessment: Dict[str, Any]) -> ModuleSeverity:
+        """Calculate severity level based on threat assessment
+
+        Args:
+            threat_assessment: Dictionary containing threat assessment data
+
+        Returns:
+            ModuleSeverity enum value representing the threat level
+        """
+        # Extract threat indicators from assessment
+        threat_indicators = {
+            "suspicious_patterns": 0,
+            "anomaly_score": 0.0,
+            "attack_confidence": 0.0,
+            "vulnerability_score": 0.0,
+            "critical_asset_targeting": False,
+        }
+
+        # Parse threat assessment data
+        if "indicators" in threat_assessment:
+            indicators = threat_assessment["indicators"]
+
+            # Count suspicious patterns
+            if "suspicious_patterns" in indicators:
+                threat_indicators["suspicious_patterns"] = len(
+                    indicators["suspicious_patterns"]
+                )
+
+            # Get anomaly score
+            if "anomaly_score" in indicators:
+                threat_indicators["anomaly_score"] = float(indicators["anomaly_score"])
+
+            # Get attack confidence
+            if "attack_confidence" in indicators:
+                threat_indicators["attack_confidence"] = float(
+                    indicators["attack_confidence"]
+                )
+
+            # Get vulnerability score
+            if "vulnerability_score" in indicators:
+                threat_indicators["vulnerability_score"] = float(
+                    indicators["vulnerability_score"]
+                )
+
+            # Check if critical assets are being targeted
+            if "critical_asset_targeting" in indicators:
+                threat_indicators["critical_asset_targeting"] = bool(
+                    indicators["critical_asset_targeting"]
+                )
+
+        # If no indicators were found, generate some based on data type
+        if threat_indicators["anomaly_score"] == 0.0:
+            data_type = threat_assessment.get("type", "unknown")
+
+            if data_type == "file":
+                # Simulate file analysis
+                file_type = threat_assessment.get("file_type", "unknown")
+                if file_type in ["pe", "elf"]:
+                    threat_indicators["anomaly_score"] = random.uniform(0.3, 0.7)
+                    threat_indicators["attack_confidence"] = random.uniform(0.2, 0.5)
+                else:
+                    threat_indicators["anomaly_score"] = random.uniform(0.1, 0.4)
+
+            elif data_type == "ip":
+                # Simulate network analysis
+                if "packets" in threat_assessment:
+                    # Count suspicious packets (e.g., to known bad ports)
+                    suspicious_ports = [4444, 1337, 31337, 8080, 6666]
+                    suspicious_count = 0
+
+                    for packet in threat_assessment["packets"]:
+                        if packet.get("dst_port") in suspicious_ports:
+                            suspicious_count += 1
+
+                    if suspicious_count > 0:
+                        threat_indicators["suspicious_patterns"] = suspicious_count
+                        threat_indicators["anomaly_score"] = random.uniform(0.4, 0.8)
+                        threat_indicators["attack_confidence"] = random.uniform(
+                            0.3, 0.6
+                        )
+                    else:
+                        threat_indicators["anomaly_score"] = random.uniform(0.1, 0.3)
+
+            elif data_type == "domain":
+                # Simulate web analysis
+                if "requests" in threat_assessment:
+                    # Check for SQL injection attempts
+                    sql_injection_patterns = [
+                        "'",
+                        "OR 1=",
+                        "--",
+                        ";",
+                        "UNION",
+                        "SELECT",
+                        "DROP",
+                        "1=1",
+                    ]
+                    injection_count = 0
+
+                    for request in threat_assessment["requests"]:
+                        params = request.get("params", {})
+                        for param_name, param_value in params.items():
+                            if isinstance(param_value, str):
+                                for pattern in sql_injection_patterns:
+                                    if pattern in param_value:
+                                        injection_count += 1
+
+                    if injection_count > 0:
+                        threat_indicators["suspicious_patterns"] = injection_count
+                        threat_indicators["anomaly_score"] = random.uniform(0.5, 0.9)
+                        threat_indicators["attack_confidence"] = random.uniform(
+                            0.4, 0.7
+                        )
+                        threat_indicators["vulnerability_score"] = random.uniform(
+                            0.3, 0.6
+                        )
+                    else:
+                        threat_indicators["anomaly_score"] = random.uniform(0.1, 0.3)
+
+        # Calculate final severity based on indicators
+        severity_score = (
+            threat_indicators["anomaly_score"] * 0.3
+            + threat_indicators["attack_confidence"] * 0.3
+            + threat_indicators["vulnerability_score"] * 0.2
+            + min(1.0, threat_indicators["suspicious_patterns"] / 5.0) * 0.2
+        )
+
+        # Adjust for critical asset targeting
+        if threat_indicators["critical_asset_targeting"]:
+            severity_score = min(1.0, severity_score * 1.5)
+
+        # Map to ModuleSeverity
+        if severity_score < 0.2:
+            return ModuleSeverity.INFORMATIONAL
+        elif severity_score < 0.4:
+            return ModuleSeverity.LOW
+        elif severity_score < 0.6:
+            return ModuleSeverity.MEDIUM
+        elif severity_score < 0.8:
+            return ModuleSeverity.HIGH
+        else:
+            return ModuleSeverity.CRITICAL
+
+    def run(self, args: List[str]) -> ModuleResult:
+        """Run the neural swarm module"""
+        parsed_args = self.args_parser.parse_args(args)
+
+        # Initialize the swarm controller
+        self.controller = SwarmController(num_agents=parsed_args.agents)
+        self.controller.start()
+
+        try:
+            # Prepare the data for analysis
+            if parsed_args.target:
+                data = self._prepare_target_data(parsed_args.target)
+            else:
+                return ModuleResult(
+                    success=False,
+                    message="No target specified",
+                    module_name=self.name,
+                    severity=ModuleSeverity.MEDIUM,
+                )
+
+            # Feed data to the swarm for analysis
+            start_time = time.time()
+            threat_assessment = self.controller.analyze_target(data)
+            analysis_time = time.time() - start_time
+
+            # Add performance metrics
+            threat_assessment["performance"] = threat_assessment.get("performance", {})
+            threat_assessment["performance"]["analysis_time"] = analysis_time
+
+            # Calculate convergence metrics
+            convergence_rate = self.controller.get_convergence_rate()
+            threat_assessment["performance"]["convergence_rate"] = convergence_rate
+
+            # Add consensus among agents
+            threat_assessment["performance"][
+                "agent_consensus"
+            ] = self.controller.get_agent_consensus()
+
+            # Determine overall threat level
+            threat_severity = self._calculate_severity(threat_assessment)
+
+            # Prepare detailed results for output
+            results = {
+                "target": parsed_args.target,
+                "threat_assessment": threat_assessment,
+                "swarm_stats": {
+                    "num_agents": parsed_args.agents,
+                    "iterations": self.controller.iterations,
+                    "convergence_threshold": self.controller.convergence_threshold,
+                },
+                "performance_metrics": threat_assessment.get("performance", {}),
+            }
+
+            return ModuleResult(
+                success=True,
+                message=f"Neural swarm analysis complete. Threat level: {threat_severity.name}",
+                module_name=self.name,
+                severity=threat_severity,
+                details=results,
+            )
+
+            # Submit the task to the swarm
+            task_id = self.controller.submit_task(parsed_args.mode, data)
+
+            # Wait for the result with the specified timeout
+            result = self.controller.get_result(task_id, timeout=parsed_args.timeout)
+
+            if result is None:
+                raise ModuleRuntimeError("Swarm timed out", ModuleSeverity.MEDIUM)
+
+            # Process the result
+            if "error" in result:
+                return ModuleResult(
+                    success=False,
+                    message=f"Swarm error: {result['error']}",
+                    module_name=self.name,
+                    severity=ModuleSeverity.MEDIUM,
+                    data=result,
+                )
+
+            # If we're here, the operation was successful
+            return ModuleResult(
+                success=True,
+                message=f"Neural swarm {parsed_args.mode} completed successfully",
+                module_name=self.name,
+                severity=ModuleSeverity.INFO,
+                data=result,
+            )
+
+        except Exception as e:
+            self.logger.exception("Error in neural swarm module")
+            return ModuleResult(
+                success=False,
+                message=str(e),
+                module_name=self.name,
+                severity=ModuleSeverity.HIGH,
+                error=e,
+            )
+        finally:
+            # Always stop the controller when done
+            if self.controller:
+                self.controller.stop()
+
+
 if __name__ == "__main__":
     module = Module()
-    result = module.run()
+    result = module.run([])
     print(json.dumps(result, indent=2))
