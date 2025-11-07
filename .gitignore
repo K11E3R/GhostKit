@@ -45,6 +45,7 @@ ENV/
 
 # Documentation builds
 docs/_build/
+site/
 
 # Secure files that shouldn't be committed
 *.pem

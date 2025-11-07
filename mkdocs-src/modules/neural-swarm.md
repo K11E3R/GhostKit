@@ -1,7 +1,5 @@
 # Neural Swarm Intelligence Module
 
-![Neural Swarm Banner](../assets/images/neural-swarm-banner.png)
-
 > "Many minds, one purpose - distributed intelligence for advanced threat detection" — GhostKit Red Team
 
 ## Module Overview
@@ -376,8 +374,6 @@ Expected performance characteristics:
 
 ## References
 
-- [Swarm Intelligence Fundamentals](../advanced/swarm-intelligence.md)
-- [Machine Learning in Security](../advanced/ml-security.md)
 - [GhostKit API Documentation](../development/api-reference.md)
 - [Performance Tuning Guide](../technical.md)
 
