@@ -48,7 +48,6 @@ theme:
 # Enhanced plugins for security documentation
 plugins:
   - search
-  - social
   - tags
   - mkdocstrings:
       handlers:
@@ -105,6 +104,8 @@ nav:
   - Offensive Modules:
       - Exploit Engine: modules/exploit_engine.md
       - Web Vulnerability Scanner: modules/web-scanner.md
+      - Neural Swarm Intelligence: modules/neural-swarm.md
+      - AI Vulnerability Analyzer: modules/ai-vulnerability-analyzer.md
   - Advanced Usage:
       - Exploitation Techniques: advanced/exploitation-techniques.md
       - Threat Intelligence: advanced/threat-intelligence.md
