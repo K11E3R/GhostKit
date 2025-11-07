@@ -380,7 +380,7 @@ Expected performance characteristics:
 ## Related Modules
 
 - [AI Vulnerability Analyzer](ai-vulnerability-analyzer.md) - ML-based vulnerability detection
-- [Network Scanner](../index.md) - Network reconnaissance
+- [Web Vulnerability Scanner](web-scanner.md) - Web application scanning
 - [Threat Intelligence](../advanced/threat-intelligence.md) - Threat data integration
 
 ---
